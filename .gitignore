@@ -1,6 +1,7 @@
 # Ignore Mac system files
 .DS_store
 /p5/latentSpace/data/*
+/p5/*/data/*
 /documents
 */witze
 # Ignore all python notebook checkpoint files
