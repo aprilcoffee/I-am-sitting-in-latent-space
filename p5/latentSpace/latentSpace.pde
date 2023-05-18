@@ -30,6 +30,12 @@ PGraphics imageRenderer;
 
 int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
+
+
+int mode;
+int movement;
+int modeT;
+String showText = "";
 void setup() {
 
   //size(5040, 472, P3D);
@@ -37,8 +43,9 @@ void setup() {
   size(10080, 944, P3D);
   surface.setResizable(false);
   soundSetup();
+  osc_setup();
   //black = loadImage("black.jpg");
-  frameRate(30);
+  frameRate(60);
 
 
   imageWidth = canvasWidth / 10;
@@ -61,14 +68,16 @@ void draw() {
   soundCheck();
   imageRenderer.beginDraw();
   imageRenderer.background(0);
-  int VolumeHeight = floor(volume*10000);
+  int VolumeHeight = floor(volume*50);
   for (int i = 0; i < 10; i++) {
 
     int currentImageIndex = 0;
-    if(VolumeHeight>300)VolumeHeight=299;
-    if(VolumeHeight>50)currentImageIndex=VolumeHeight-50;
-   
-    PImage currentImage = getCachedImage(i, counter);
+    if (VolumeHeight>300)VolumeHeight=299;
+
+
+    if (VolumeHeight>100)currentImageIndex=VolumeHeight-100;
+
+    PImage currentImage = getCachedImage(i, currentImageIndex);
 
     //imageGrid[i][currentImageIndex];
 
@@ -95,12 +104,16 @@ void draw() {
   textSize(200);
   textAlign(CENTER, CENTER);
   fill(255);
-  stroke(0);
+  stroke(0);  
   text(str(frameRate), width/2, height/2);
-
+  textSize(100);
+  for (int s=0; s<width; s+=500) {
+    showText = "你好";
+    text(showText, s, height/2+100);
+  }
 
   if (frameCount%10==0) {
-    println(str(VolumeHeight));
+    //println(str(VolumeHeight));
   }
 
   /*
