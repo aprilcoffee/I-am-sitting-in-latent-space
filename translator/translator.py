@@ -11,6 +11,8 @@ import math
 
 from pythonosc.dispatcher import Dispatcher
 from pythonosc import osc_server
+from pythonosc import udp_client
+
 
 openai.api_key = "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"
 #from playsound import playsound
@@ -94,13 +96,57 @@ os.system("play "+choiceFile+"&")
 time.sleep(5)
 '''
 
-transcription = "ocean"
-for k in range(10):
-    pick = random.choice(list(language.keys()))
-    translator= Translator(to_lang=first2(language[pick]))
-    #input_text = "Was ist erst grün und dann rot? Ein Frosch im Mixer."
-    input_text = transcription
-    output = translator.translate(input_text)
 
-    os.system("say -v "+pick+" '"+output+"' &") 
-    print(output)
+def print_voice_handler(unused_addr, args, volume):
+    print("[{0}] ~ {1}".format(args[0], volume))
+    for k in range(1):
+        pick = random.choice(list(language.keys()))
+        translator= Translator(to_lang=first2(language[pick]))
+        #input_text = "Was ist erst grün und dann rot? Ein Frosch im Mixer."
+        input_text = transcription
+        output = translator.translate(input_text)
+
+        os.system("say -v "+pick+" '"+output+"' &") 
+        #time.sleep(1)
+        print(output)
+
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--ip", default="172.17.2.40",
+        help="The ip of the OSC server")
+        parser.add_argument("--port", type=int, default=12001,
+        help="The port the OSC server is listening on")
+        args = parser.parse_args()
+
+        client = udp_client.SimpleUDPClient(args.ip, args.port)
+        print(client)
+        
+        client.send_message("/voice", output)
+        #time.sleep(1)s
+
+def print_compute_handler(unused_addr, args, volume):
+  try:
+    print("[{0}] ~ {1}".format(args[0], args[1](volume)))
+  except ValueError: pass
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip",
+    default="127.0.0.1", help="The ip to listen on")
+    parser.add_argument("--port",
+    type=int, default=5005, help="The port to listen on")
+    args = parser.parse_args()
+
+    dispatcher = Dispatcher()
+    dispatcher.map("/filter", print)
+    dispatcher.map("/voice", print_voice_handler, "Voice")
+    dispatcher.map("/logvolume", print_compute_handler, "Log volume", math.log)
+
+    server = osc_server.ThreadingOSCUDPServer(
+    (args.ip, args.port), dispatcher)
+    print("Serving on {}".format(server.server_address))
+    
+    transcription = "ocean"
+
+
+    server.serve_forever()
