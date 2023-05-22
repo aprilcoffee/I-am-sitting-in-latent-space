@@ -14,7 +14,8 @@ from pythonosc import osc_server
 from pythonosc import udp_client
 
 
-openai.api_key = "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"
+
+openai.api_key = "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"
 #from playsound import playsound
 
 import os, glob
@@ -95,9 +96,34 @@ print(transcription)
 os.system("play "+choiceFile+"&") 
 time.sleep(5)
 '''
+def sendOSCtoVisual(output):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default="172.17.2.40",
+    help="The ip of the OSC server")
+    parser.add_argument("--port", type=int, default=12001,
+    help="The port the OSC server is listening on")
+    args = parser.parse_args()
+
+    client = udp_client.SimpleUDPClient(args.ip, args.port)
+    client.send_message("/voice", output)
 
 
-def print_voice_handler(unused_addr, args, volume):
+def sendOSCtoMax(output):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default="127.0.0.1",
+    help="The ip of the OSC server")
+    parser.add_argument("--port", type=int, default=5006,
+    help="The port the OSC server is listening on")
+    args = parser.parse_args()
+
+    client = udp_client.SimpleUDPClient(args.ip, args.port)
+    client.send_message("/sound", output)
+
+def beach_handler(unused_addr, args, volume):
+    print(unused_addr,args,volume)
+    
+    transcription = "ocean"
+
     print("[{0}] ~ {1}".format(args[0], volume))
     for k in range(1):
         pick = random.choice(list(language.keys()))
@@ -105,24 +131,37 @@ def print_voice_handler(unused_addr, args, volume):
         #input_text = "Was ist erst grün und dann rot? Ein Frosch im Mixer."
         input_text = transcription
         output = translator.translate(input_text)
-
         os.system("say -v "+pick+" '"+output+"' &") 
+
         #time.sleep(1)
         print(output)
 
-
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--ip", default="172.17.2.40",
-        help="The ip of the OSC server")
-        parser.add_argument("--port", type=int, default=12001,
-        help="The port the OSC server is listening on")
-        args = parser.parse_args()
-
-        client = udp_client.SimpleUDPClient(args.ip, args.port)
-        print(client)
+        #sendOSCtoVisual(output)
         
-        client.send_message("/voice", output)
         #time.sleep(1)s
+    
+    
+
+def voice_handler(unused_addr,args,volume):
+    print("go for record audio mode")
+    
+    audio_file= open("/Users/AprilCoffee/Documents/GitHub/I-am-sitting-in-latent-space/max/say.wav", "rb")
+    transcript = openai.Audio.transcribe("whisper-1", audio_file)
+    print(transcript.text)
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a tourist, only answering with one or two sentences"},
+            #{"role": "user", "content": "Who won the world series in 2020?"},
+            #{"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+            {"role": "user", "content": transcript.text}
+        ]
+    )
+    print(response['choices'][0]['message']['content'])
+    output = response['choices'][0]['message']['content']
+    os.system("say -v Alex '"+output+"'") 
+    sendOSCtoMax("done")
+
 
 def print_compute_handler(unused_addr, args, volume):
   try:
@@ -139,14 +178,14 @@ if __name__ == "__main__":
 
     dispatcher = Dispatcher()
     dispatcher.map("/filter", print)
-    dispatcher.map("/voice", print_voice_handler, "Voice")
+    dispatcher.map("/beach", beach_handler, "beach")
+    dispatcher.map("/voice", voice_handler, "voice")
     dispatcher.map("/logvolume", print_compute_handler, "Log volume", math.log)
 
     server = osc_server.ThreadingOSCUDPServer(
     (args.ip, args.port), dispatcher)
     print("Serving on {}".format(server.server_address))
     
-    transcription = "ocean"
-
+    
 
     server.serve_forever()
