@@ -24,7 +24,9 @@ int lastmixerLargest = 0;
 
 int tempo;
 float overall_volume;
-
+void initualLoad() {
+  fx = new PostFX(this);
+}
 
 void osc_setup() {
   //Midi Control
