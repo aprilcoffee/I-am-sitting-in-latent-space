@@ -4,5 +4,3 @@ void mode1() {
   morphing_beach();
 
 }
-void mode2() {
-}

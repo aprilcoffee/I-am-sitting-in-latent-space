@@ -42,9 +42,9 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 1;
+int mode = 2;
 int movement = 0 ;
-int modeT;
+int modeT=0;
 
 
 
@@ -61,6 +61,10 @@ int mode0counter = 0;
 float mode0lerp = 0;
 
 
+
+//mode2
+int mode2counter = 0;
+float mode2lerp = 0;
 
 void setup() {
 
@@ -97,28 +101,27 @@ void setup() {
   //println(PFont.list());
   customFont = createFont("Noto Sans", 80);
   textFont(customFont);
-  for (int s=1; s<=10; s++) {
-    cut[s-1]=loadImage("cuts/img_"+nf(s, 2)+".jpg");
+  for (int s=0; s<10; s++) {
+    cut[s]=loadImage("cuts/img_"+nf(s+1, 2)+".jpg");
   }
 
   println(width, height);
   println(imageWidth, imageHeight);
 
   particles = new ArrayList<Boid>();
-  
+
   for (int i = 0; i < 300; i++) {
     float x = random(canvasWidth);
     float y = random(canvasHeight);
     particles.add(new Boid(x, y));
   }
-  
 }
 boolean loadOnce = false;
 PImage tempimg;
 void draw() {
   camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
 
-  mode = 0;
+  //mode = 0;
   soundCheck();
   //background(0);
   if (loadInit==false) {
@@ -163,6 +166,6 @@ void draw() {
 
 
   blendMode(BLEND);
-  showFPS();
+  //showFPS();
   if (frameCount%10==0)println(volume);
 }

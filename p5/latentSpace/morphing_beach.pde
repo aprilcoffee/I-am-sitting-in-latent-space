@@ -95,21 +95,3 @@ void morphing_beach() {
         //.blur(30, 10)
         .compose();
 }
-
-PImage getOriginImage(int imageSpace) {
-  String imgstrNew = "cuts/img_" + nf(imageSpace+1, 2) + ".jpg";
-  PImage i = loadImage(imgstrNew);
-  return i;
-}
-PImage getCachedImage(int imageSpace, int imageIndex) {
-  if (imageGrid[imageSpace][imageIndex] == null) {
-    //String imageName = "image" + (imageSpace + 1) + "-" + (imageIndex + 1) + ".jpg";
-    String imgstr = "morph/" + str(imageSpace + 1) + "/" + str(imageIndex-1) + ".jpg";
-
-    String imgstrNew = "morph/" + str(imageSpace + 1) + "/img_" + nf(imageIndex, 5) + ".jpg";
-
-    imageGrid[imageSpace][imageIndex] = loadImage(imgstrNew);
-  }
-
-  return imageGrid[imageSpace][imageIndex];
-}
