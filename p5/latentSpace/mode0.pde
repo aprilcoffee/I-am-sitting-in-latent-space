@@ -1,57 +1,63 @@
+int imageLoadingLimitMode0 = 100;
+
 void loadAllMode0Image() {
   print("loading Mode 0 images");
   fx = new PostFX(this);
 
   print(hour()+":"+minute()+":"+second());
   for (int space = 0; space<10; space++) {
-    String imgstrMask = "mask/1/img_" + nf(space+1, 2) + ".jpg";
-    mask[0][space] =  loadImage(imgstrMask);
-
     //println("loading\t"+str(space));
-    for (int index = 0; index<100; index++) {
-      String imgstrNew = "morph/" + str(space + 1) + "/" + index + ".jpg";
-      imageGrid[space][index]=loadImage(imgstrNew) ;
+    for (int index = 0; index<300; index++) {
+      String imgstrNew = "mask_morph0/" + str(space + 1) + "/img_" +  nf(index, 5) + ".jpg";
+      imageGrid[0][space][index]=loadImage(imgstrNew) ;
+    }
+    for (int index = 0; index<300; index++) {
+      String imgstrNew = "mask_morph1/" + str(space + 1) + "/img_" +  nf(index, 5)  + ".jpg";
+      imageGrid[1][space][index]=loadImage(imgstrNew) ;
     }
   }
-  
+
   print(hour()+":"+minute()+":"+second());
 }
 
 void mode0() {
 
-  imageRenderer.beginDraw();
+  pixelSortRendererMode0.beginDraw();
   if (modeT == 0) {
-    imageRenderer.background(0);
+    pixelSortRendererMode0.background(0);
     for (int i = 0; i < 10; i++) {
       int currentImageIndex = 0;
       int VolumeHeight = floor(volume*25);
-      if (VolumeHeight>125)VolumeHeight=125;
-      if (VolumeHeight>25)currentImageIndex=VolumeHeight-25;
+      
+      imageLoadingLimitMode0
       PImage currentImage;
+      PImage nextImage;
+
       if (currentImageIndex == 0) {
         currentImage = cut[i];
       } else {
-        currentImage = getCachedImage(i, currentImageIndex);
+        currentImage = getCachedImage(0, i, currentImageIndex);
       }
 
       //imageGrid[i][currentImageIndex];
 
-      imageRenderer.shader(imageShader);
-      imageShader.set("imageTex", currentImage);
-      imageRenderer.pushMatrix();
-      imageRenderer.translate(i * imageWidth, 0);
-      imageRenderer.noStroke();
-      imageRenderer.rect(0, 0, imageWidth, imageHeight);
+      pixelSortRendererMode0.shader(pixelSortShaderMode0);
+      pixelSortShaderMode0.set("imageTex1", currentImage);
+      pixelSortShaderMode0.set("imageTex2", currentImage);
+      pixelSortRendererMode0.pushMatrix();
+      pixelSortRendererMode0.translate(i * imageWidth, 0);
+      pixelSortRendererMode0.noStroke();
+      pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
 
-      //imageRenderer.image(currentImage, 0, 0, imageWidth, imageHeight);
-      imageRenderer.popMatrix();
-      imageRenderer.blendMode(BLEND);
+      //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
+      pixelSortRendererMode0.popMatrix();
+      pixelSortRendererMode0.blendMode(BLEND);
 
       // Update the image index for the next frame
       //imageIndices[i] = (imageIndices[i] + 1) % 100;
     }
   } else if (modeT ==1) {
-    imageRenderer.background(0);
+    pixelSortRendererMode0.background(0);
 
     int currentImageIndex = 0;
 
@@ -66,30 +72,30 @@ void mode0() {
         currentImage = cut[i];
       } else {
         if (showMask) {
-          imageRenderer.blendMode(ADD);
+          pixelSortRendererMode0.blendMode(ADD);
           currentImage = mask[0][i];
         } else {
-          currentImage = getCachedImage(i, currentImageIndex);
+          currentImage = getCachedImage(0, i, currentImageIndex);
         }
       }
 
       //imageGrid[i][currentImageIndex];
 
-      imageRenderer.shader(imageShader);
-      imageShader.set("imageTex", currentImage);
-      imageRenderer.pushMatrix();
-      imageRenderer.translate(i * imageWidth, 0);
-      imageRenderer.noStroke();
-      imageRenderer.rect(0, 0, imageWidth, imageHeight);
-      //imageRenderer.image(currentImage, 0, 0, imageWidth, imageHeight);
-      imageRenderer.popMatrix();
-      imageRenderer.blendMode(BLEND);
+      pixelSortRendererMode0.shader(pixelSortShaderMode0);
+      pixelSortShaderMode0.set("imageTex", currentImage);
+      pixelSortRendererMode0.pushMatrix();
+      pixelSortRendererMode0.translate(i * imageWidth, 0);
+      pixelSortRendererMode0.noStroke();
+      pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+      //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
+      pixelSortRendererMode0.popMatrix();
+      pixelSortRendererMode0.blendMode(BLEND);
 
       // Update the image index for the next frame
       //imageIndices[i] = (imageIndices[i] + 1) % 100;
     }
   } else if (modeT == 2) {
-    imageRenderer.clear();
+    pixelSortRendererMode0.clear();
 
     int currentImageIndex = 0;
 
@@ -105,25 +111,25 @@ void mode0() {
         currentImage = cut[i];
       } else {
         if (showMask) {
-          imageRenderer.blendMode(ADD);
+          pixelSortRendererMode0.blendMode(ADD);
           currentImage = mask[0][i];
         } else {
-          currentImage = getCachedImage(i, currentImageIndex);
+          currentImage = getCachedImage(0, i, currentImageIndex);
         }
       }
 
       //imageGrid[i][currentImageIndex];
 
-      imageRenderer.shader(imageShader);
-      imageShader.set("imageTex", currentImage);
-      imageRenderer.pushMatrix();
-      imageRenderer.translate(i * imageWidth, 0);
-      imageRenderer.noStroke();
-      imageRenderer.rect(0, 0, imageWidth, imageHeight);
+      pixelSortRendererMode0.shader(pixelSortShaderMode0);
+      pixelSortShaderMode0.set("imageTex", currentImage);
+      pixelSortRendererMode0.pushMatrix();
+      pixelSortRendererMode0.translate(i * imageWidth, 0);
+      pixelSortRendererMode0.noStroke();
+      pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
 
-      //imageRenderer.image(currentImage, 0, 0, imageWidth, imageHeight);
-      imageRenderer.popMatrix();
-      imageRenderer.blendMode(BLEND);
+      //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
+      pixelSortRendererMode0.popMatrix();
+      pixelSortRendererMode0.blendMode(BLEND);
 
       // Update the image index for the next frame
       //imageIndices[i] = (imageIndices[i] + 1) % 100;
@@ -140,10 +146,8 @@ void mode0() {
           //.blur(30, 10)
           .compose();
   }
-  imageRenderer.endDraw();
-  image(imageRenderer, 0, 0, width, height);
-
-
+  pixelSortRendererMode0.endDraw();
+  image(pixelSortRendererMode0, 0, 0, width, height);
 
   counter++;
   counter %= 100;
@@ -154,15 +158,14 @@ PImage getOriginImage(int imageSpace) {
   PImage i = loadImage(imgstrNew);
   return i;
 }
-PImage getCachedImage(int imageSpace, int imageIndex) {
-  if (imageGrid[imageSpace][imageIndex] == null) {
+PImage getCachedImage(int which, int imageSpace, int imageIndex) {
+  if (imageGrid[which][imageSpace][imageIndex] == null) {
     //String imageName = "image" + (imageSpace + 1) + "-" + (imageIndex + 1) + ".jpg";
     //String imgstr = "morph/" + str(imageSpace + 1) + "/" + str(imageIndex-1) + ".jpg";
+    String imgstrNew = "mask_morph"+str(which)+"/" + str(imageSpace + 1) + "/" + nf(imageIndex, 5) + ".jpg";
 
-    String imgstrNew = "morph/" + str(imageSpace + 1) + "/" + imageIndex + ".jpg";
-
-    imageGrid[imageSpace][imageIndex] = loadImage(imgstrNew);
+    imageGrid[which][imageSpace][imageIndex] = loadImage(imgstrNew);
   }
 
-  return imageGrid[imageSpace][imageIndex];
+  return imageGrid[which][imageSpace][imageIndex];
 }

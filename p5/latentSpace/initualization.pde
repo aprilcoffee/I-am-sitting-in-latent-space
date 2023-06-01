@@ -26,8 +26,9 @@ int tempo;
 float overall_volume;
 void initualLoad() {
   fx = new PostFX(this);
-  //loadAllMode0Image();
-  loadAllMode2Image();
+  loadAllMode0Image();
+  //loadAllMode2Image();
+  //loadAllMode1Image();
 }
 
 void osc_setup() {

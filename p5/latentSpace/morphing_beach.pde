@@ -11,7 +11,7 @@ void morphing_beach() {
       println("loading\t"+str(space));
       for (int index = 0; index<100; index++) {
         String imgstrNew = "morph/" + str(space + 1) + "/img_" + nf(index, 5) + ".jpg";
-        imageGrid[space][index]=loadImage(imgstrNew) ;
+        //imageGrid[space][index]=loadImage(imgstrNew) ;
       }
     }
 
@@ -40,7 +40,7 @@ void morphing_beach() {
         imageRenderer.blendMode(ADD);
         currentImage = mask[0][i];
       } else {
-        currentImage = getCachedImage(i, currentImageIndex);
+        //currentImage = getCachedImage(i, currentImageIndex);
       }
     }
 
@@ -50,7 +50,7 @@ void morphing_beach() {
     imageRenderer.translate(i * imageWidth, 0);
     imageRenderer.noStroke();
     imageRenderer.rect(0, 0, imageWidth, imageHeight);
-    imageShader.set("imageTex", currentImage);
+    //imageShader.set("imageTex", currentImage);
     imageRenderer.shader(imageShader);
 
     //imageRenderer.image(currentImage,0,0,imageWidth,imageHeight);
