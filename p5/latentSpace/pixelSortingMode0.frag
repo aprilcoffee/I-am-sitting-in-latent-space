@@ -6,12 +6,17 @@ uniform sampler2D imageTex1;
 uniform sampler2D imageTex2;
 uniform float changing;
 uniform float volume;
+uniform float grid;
 
+
+//or or or or
 
 uniform float volume_Low;
 uniform float volume_Mid;
 uniform float volume_High;
 
+
+//|| 
 uniform float interpolationFactor;  // Control the interpolation factor
 varying vec4 vertTexCoord;
 
@@ -31,7 +36,13 @@ void main() {
   vec4 interpolatedColor = mix(color1, color2, interpolationFactor);
   // && abs(texCoord.y - 0.5) < changing
   float bw = (interpolatedColor.r + interpolatedColor.g +interpolatedColor.b)/3;
-  
-  gl_FragColor = interpolatedColor; // Show the interpolated color
-
+  if(changing>=0.5){
+    if(bw > volume){
+      gl_FragColor = vec4(0.0,0.0,0.0,0.0); 
+    }else {
+      gl_FragColor = interpolatedColor; // Show the interpolated color
+    }
+  }else{
+    gl_FragColor = interpolatedColor; // Show the interpolated color
+  }
 }

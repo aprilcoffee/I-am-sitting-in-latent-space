@@ -46,6 +46,7 @@ void osc_setup() {
   oscP5.plug(this, "bpm", "/bpm");
   oscP5.plug(this, "overall_volume", "/overall_volume");
   oscP5.plug(this, "mixer_volume", "/mixer_volume");
+  oscP5.plug(this, "recording", "/recording");
 
 
   oscP5.plug(this, "voice", "/voice");

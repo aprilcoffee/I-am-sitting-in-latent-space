@@ -1,6 +1,6 @@
 ArrayList<Boid> particles;
 void loadAllMode2Image() {
-  print("loading Mode 0 images");
+  print("loading Mode 2 images");
   println(hour()+":"+minute()+":"+second());
 
   for (int i=0; i<1000; i++) {

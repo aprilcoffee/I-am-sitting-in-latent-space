@@ -36,7 +36,9 @@ PGraphics pixelSortRendererMode1;
 PShader pixelSortShaderMode1;
 
 PImage[][] shine = new PImage[10][300];
-PImage[][][] imageGrid = new PImage[2][10][300];
+PImage[][] imageGrid0 = new PImage[10][300];
+PImage[][] imageGrid1 = new PImage[10][300];
+PImage[][] imageGrid2 = new PImage[10][300];
 
 
 int imageWidth;
@@ -51,7 +53,7 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 0 ;
+int mode = 0;
 int movement = 0 ;
 int modeT=0;
 
@@ -77,6 +79,8 @@ float mode1lerp = 0;
 //mode2
 int mode2counter = 0;
 float mode2lerp = 0;
+
+boolean isRecording = false;
 
 void setup() {
 
