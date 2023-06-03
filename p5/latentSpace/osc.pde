@@ -16,6 +16,14 @@ public void con(int a, int b, float c) {
   //print("get con\t");
   //println(a, b, c);
 }
+public void recording(int a) {
+  if(a==0) isRecording = false;
+  else if(a==1) isRecording = true;
+  //println(a, b);
+
+
+  //print("get con\t");
+}
 public void mixer_volume(int _gate, float _mixer_volume) {
   //println(_gate);
   switch(_gate) {
