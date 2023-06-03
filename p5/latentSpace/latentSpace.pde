@@ -6,9 +6,6 @@ import ch.bildspur.postfx.*;
 PostFX fx;
 
 //Camera Moving Variable
-float camXX = 0, camYY = 0, camZZ = 0;
-float camX = 0, camY = 0, camZ = 0;
-
 float x1, y1, yy1;
 float x2, y2, yy2;
 float bx, by;
@@ -53,10 +50,13 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 0;
+int mode = 1;
 int movement = 0 ;
 int modeT=0;
 
+float camXX = canvasWidth/2.0, camYY = canvasHeight/2.0, camZZ = (canvasHeight/2.0) / tan(PI*30.0 / 180.0);
+float camX = canvasWidth/2.0, camY =  canvasHeight/2.0, camZ = (canvasHeight/2.0) / tan(PI*30.0 / 180.0);
+float ori_camX = canvasWidth/2.0, ori_camY =  canvasHeight/2.0, ori_camZ = (canvasHeight/2.0) / tan(PI*30.0 / 180.0);
 
 
 PFont customFont;
@@ -143,12 +143,32 @@ void setup() {
     particles.add(new Boid(x, y));
   }
   background(0);
+  hint(DISABLE_DEPTH_TEST);
+
+  ps = new ParticleSystem(new PVector(0, canvasHeight/2));
 }
 boolean loadOnce = false;
 PImage tempimg;
+void resetCam() {
+  camXX = width/2.0;
+  camYY =  height/2.0;
+  camZZ = (height/2.0) / tan(PI*30.0 / 180.0);
+}
 void draw() {
-  camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
 
+
+  float easing = 0.3;
+  // camX = 0, camY = 0, camZ = 1000;
+  camX += (camXX-camX)*easing;
+  camY += (camYY-camY)*easing;
+  camZ += (camZZ-camZ)*easing;
+
+  //camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
+  camera(camX, camY, camZ, width/2.0, height/2.0, 0, 0, 1, 0);
+
+
+  pushMatrix();
+  //translate(-canvasWidth/2, -canvasHeight/2);
   //mode = 0;
   soundCheck();
   //background(0);
@@ -192,6 +212,7 @@ void draw() {
     break;
   }
 
+  popMatrix();
 
   blendMode(BLEND);
   //showFPS();

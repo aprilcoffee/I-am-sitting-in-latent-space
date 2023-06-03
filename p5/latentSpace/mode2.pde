@@ -1,22 +1,45 @@
 ArrayList<Boid> particles;
+int imageLoadingLimitMode2 = 50;
+
+
+// Create a particle system object
+ParticleSystem ps;
+
+
 void loadAllMode2Image() {
   print("loading Mode 2 images");
   println(hour()+":"+minute()+":"+second());
 
-  for (int i=0; i<1000; i++) {
+  for (int i=0; i<imageLoadingLimitMode2; i++) {
     //print(i);
-    String imgstr = "fullMorph/img2img3/img_" + nf(i, 5) + ".jpg";
+    String imgstr = "fullMorph/img2img1/img_" + nf(i, 5) + ".jpg";
     allBeach[0][i] =  loadImage(imgstr);
   }
-    println(hour()+":"+minute()+":"+second());
-
+  for (int i=0; i<imageLoadingLimitMode2; i++) {
+    //print(i);
+    String imgstr = "fullMorph/img2img4/img_" + nf(i, 5) + ".png";
+    allBeach[1][i] =  loadImage(imgstr);
+  }
+  for (int i=0; i<imageLoadingLimitMode2; i++) {
+    //print(i);
+    String imgstr = "fullMorph/img2img5/img_" + nf(i, 5) + ".jpg";
+    allBeach[2][i] =  loadImage(imgstr);
+  }
+  println(hour()+":"+minute()+":"+second());
 }
 
 void mode2() {
-  modeT=3;
+
   blendMode(BLEND);
   hint(DISABLE_DEPTH_TEST);
   if (modeT==0) {
+
+
+
+    tint(255, 3);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
+
 
     pixelSortRenderer.beginDraw();
     pixelSortRenderer.shader(pixelSortShader);
@@ -25,10 +48,22 @@ void mode2() {
     pixelSortShader.set("imageTex2", allBeach[0][mode2counter+1]);
     pixelSortShader.set("interpolationFactor", mode2lerp);
 
-    pixelSortShader.set("changing", volume*2);
+    pixelSortShader.set("changing", volume*2.5);
     pixelSortRenderer.rect(0, 0, width, height);
     pixelSortRenderer.endDraw();
+    // Add particles to the system
+    if (tempo%4==0) {
+      for (int i = 0; i < 5; i++) {
+        ps.addParticle();
+      }
+    }
+    tint(255, volume*5);
     image(pixelSortRenderer, 0, 0, width, height);
+    tint(255, 255);
+
+    // Update and display the particle system
+    ps.update();
+    ps.display();
 
     mode2lerp+=volume*2;
     if (mode2lerp >= 1) {
@@ -37,8 +72,80 @@ void mode2() {
       //print("changed");
     }
 
-    mode2counter%=100-1;
+    mode2counter%=imageLoadingLimitMode2-2;
+  } else if (modeT==1) {
+
+
+    tint(255, 3);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
+
+
+    pixelSortRenderer.beginDraw();
+    pixelSortRenderer.shader(pixelSortShader);
+    pixelSortRenderer.clear();
+    pixelSortShader.set("imageTex1", allBeach[0][mode2counter]);
+    pixelSortShader.set("imageTex2", allBeach[0][mode2counter+1]);
+    pixelSortShader.set("interpolationFactor", mode2lerp);
+
+    pixelSortShader.set("changing", volume*1.5);
+    pixelSortRenderer.rect(0, 0, width, height);
+    pixelSortRenderer.endDraw();
+    // Add particles to the system
+    if (tempo%4==0) {
+      for (int i = 0; i < 5; i++) {
+        ps.addParticle();
+      }
+    }
+    tint(255, volume*100);
+    image(pixelSortRenderer, 0, 0, width, height);
+    tint(255, 255);
+
+    // Update and display the particle system
+    ps.update();
+    ps.display();
+
+    mode2lerp+=volume*2;
+    if (mode2lerp >= 1) {
+      mode2counter++;
+      mode2lerp = 0;
+      //print("changed");
+    }
+
+    mode2counter%=imageLoadingLimitMode2-2;
+  } else if (modeT==2) {
+
+
+
+    tint(255, 30);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
+
+
+
+    pixelSortRenderer.beginDraw();
+    pixelSortRenderer.shader(pixelSortShader);
+    pixelSortRenderer.clear();
+    pixelSortShader.set("imageTex1", allBeach[1][mode2counter]);
+    pixelSortShader.set("imageTex2", allBeach[1][mode2counter+1]);
+    pixelSortShader.set("interpolationFactor", mode2lerp);
+
+    pixelSortShader.set("changing", volume*1.5);
+    pixelSortRenderer.rect(0, 0, width, height);
+    pixelSortRenderer.endDraw();
+    image(pixelSortRenderer, 0, 0, width, height);
+
+    mode2lerp+=volume*3;
+    if (mode2lerp >= 1) {
+      mode2counter++;
+      mode2lerp = 0;
+      //print("changed");
+    }
+
+    mode2counter%=imageLoadingLimitMode2-2;
   } else if (modeT==3) {
+
+
     tint(255, 190);
     image(black, 0, 0, width, height);
     tint(255, 255);
@@ -68,7 +175,7 @@ void mode2() {
 
 
 
-    if (volume>0.5 ||frameCount%20==0) {
+    if (volume<1) {
       blendMode(BLEND);
       image(pixelSortRenderer, 0, 0, width, height);
     } else {
@@ -76,7 +183,6 @@ void mode2() {
       pixelSortRenderer.loadPixels();
 
       for (Boid boid : particles) {
-
 
         int xx = floor(boid.position.x);
         int yy = floor(boid.position.y);
@@ -105,14 +211,13 @@ void mode2() {
         //.blur(30, 10)
         .compose();
     }
-    mode2lerp+=volume*5;
-    if (mode2lerp >= 1) {
-      mode2counter++;
+    mode2lerp+=volume*100;
+    if (mode2lerp >= 10) {
+      mode2counter+=mode2lerp/10;
       mode2lerp = 0;
       //print("changed");
     }
-
-    mode2counter%=100-1;
+    mode2counter%=imageLoadingLimitMode2-2;
   }
 }
 class Boid {
@@ -257,14 +362,102 @@ class Boid {
   }
 
   void display(color _col) {
+
+    float triSize=4;
     float theta = velocity.heading() + radians(90);
     fill(_col, 30);
     noStroke();
     pushMatrix();
     translate(position.x, position.y);
     rotate(theta);
-    //triangle(0, -100, -50, 100, 50, 100);
-    rect(0, 0, volume*30, volume*30);
+    triangle(0, -volume*triSize, -volume*triSize/2, volume*triSize, volume*triSize/2, volume*triSize/2);
+    //rect(0, 0, volume*30, volume*30);
     popMatrix();
+  }
+}
+// Particle class
+class Particle {
+  PVector position;
+  PVector velocity;
+  float lifespan;
+  float amplitude;
+  float frequency;
+  float theta;
+
+  Particle(PVector pos) {
+    position = pos.copy();
+    velocity = new PVector(3, 0); // Initial velocity towards the right
+    lifespan = 500; // Longer lifespan based on the width of the canvas
+    amplitude = random(5, 20);
+    frequency = random(0.01, 0.05);
+    theta = 0.0;
+  }
+
+  void update() {
+    float offsetX = sin(theta) * amplitude*4;
+    float offsetY = cos(theta) * amplitude/2.0;
+    position.add(velocity.copy().mult(0.2).add(offsetX, offsetY));
+    theta += frequency;
+    lifespan -= 2.0;
+    position.x = constrain(position.x, 0, width);
+    position.y = constrain(position.y, 0, height);
+  }
+
+  void display() {
+    if (lifespan>255) {
+      tint(255, map(lifespan, 500, 255, 0, 255));
+    } else {
+      tint(255, lifespan);
+    }
+    noStroke();
+    pushMatrix();
+    translate(position.x, position.y);
+    imageMode(CENTER);
+    beginShape();
+    textureMode(IMAGE);
+    texture(pixelSortRenderer);
+    vertex(0, 0, position.x, position.y);
+    vertex(200, 0, position.x + 200, position.y);
+    vertex(200, 100, position.x + 200, position.y + 100);
+    vertex(0, 100, position.x, position.y + 100);
+    endShape();
+    popMatrix();
+    imageMode(CORNER);
+    tint(255, 255);
+  }
+
+  boolean isDead() {
+    return lifespan <= 2.0;
+  }
+}
+
+// Particle System class
+class ParticleSystem {
+  ArrayList<Particle> particles;
+  PVector origin;
+
+  ParticleSystem(PVector location) {
+    particles = new ArrayList<Particle>();
+    origin = location.copy();
+  }
+
+  void addParticle() {
+    particles.add(new Particle(origin));
+  }
+
+  void update() {
+    for (int i = particles.size() - 1; i >= 0; i--) {
+      Particle particle = particles.get(i);
+      particle.update();
+      if (particle.isDead()) {
+        particles.remove(i);
+      }
+    }
+  }
+
+  void display() {
+    for (Particle particle : particles) {
+      particle.display();
+    }
   }
 }

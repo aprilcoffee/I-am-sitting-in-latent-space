@@ -1,4 +1,4 @@
-int imageLoadingLimitMode0 = 50;
+int imageLoadingLimitMode0 = 100;
 int Mode0constant = 5;
 int morphWhich = 0;
 void loadAllMode0Image() {
@@ -34,7 +34,7 @@ void mode0() {
   pixelSortRendererMode0.beginDraw();
 
   if (isRecording) {
-    tint(255, 170);
+    tint(255, 40);
     image(black, 0, 0, width, height);
     tint(255, 255);
     int Mode0constant = 5;
@@ -65,13 +65,18 @@ void mode0() {
     pixelSortRendererMode0.endDraw();
     //image(pixelSortRendererMode0, 0, 0, width, height);
 
+    tint(255, 100);
+    image(pixelSortRendererMode0, 0, 0, width, height);
+    tint(255, 255);
+
+
+
     fill(255);
     stroke(255);
     strokeWeight(1);
     noStroke();
-    tint(255, volume*10);
+    tint(255, volume*50);
     beginShape();
-
     texture(pixelSortRendererMode0);
     textureMode(NORMAL);
     for (int i = 0; i < 1024; i++) {
@@ -80,6 +85,8 @@ void mode0() {
       vertex(
         map(i, 0, 1024, 0, width),
         map(waveform.data[i]*3, -1, 1, 0, height),
+        map(abs(512 - i), 0, 512, 0, 5000),
+
         map(i, 0, 1024, 0, 1),
         map(waveform.data[i]*3, -1, 1, 0, 1)
         );
@@ -89,18 +96,24 @@ void mode0() {
 
     fill(255);
     noStroke();
-    fx.render()
-      .sobel()
-      .bloom(0.1, 20, 30)
-      //.blur(10, 0.5)
-      //.toon()
-      //.brightPass(0.1)
-      //.blur(30, 10)
-      .compose();
+    if (volume > 1 && random(3)>1)
+      fx.render()
+        .sobel()
+        .bloom(0.1, 20, 30)
+        //.blur(10, 0.5)
+        //.toon()
+        //.brightPass(0.1)
+        //.blur(30, 10)
+        .compose();
   } else {
     if (modeT == 0) {
-      int Mode0constant = 5;
 
+      if (SG[0][0]) {
+        morphWhich = floor(random(9));
+        SG[0][0] = false;
+      }
+
+      int Mode0constant = 5;
       pixelSortRendererMode0.background(0);
       //println(waveformArray);
       for (int i = 0; i < 10; i++) {
@@ -132,8 +145,10 @@ void mode0() {
         pixelSortRendererMode0.pushMatrix();
         pixelSortRendererMode0.translate(i * imageWidth, 0);
         pixelSortRendererMode0.noStroke();
-        pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
-
+        pixelSortRendererMode0.rectMode(CENTER);
+        pixelSortRendererMode0.rect(imageWidth/2, imageHeight/2,
+          imageWidth - volume*5, imageHeight - volume*5);
+        pixelSortRendererMode0.rectMode(CORNER);
         //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
         pixelSortRendererMode0.popMatrix();
         pixelSortRendererMode0.blendMode(BLEND);
@@ -146,7 +161,7 @@ void mode0() {
       image(pixelSortRendererMode0, 0, 0, width, height);
       tint(255, 255);
 
-      if (SG[0][0]) {
+      if (SG[0][1]) {
         fx.render()
           .sobel()
           .bloom(0.1, 20, 30)
@@ -155,7 +170,7 @@ void mode0() {
           //.brightPass(0.1)
           //.blur(30, 10)
           .compose();
-        SG[0][0]=false;
+        SG[0][1]=false;
       }
     } else if (modeT == 1) {
       pixelSortRendererMode0.background(0);
@@ -223,7 +238,7 @@ void mode0() {
         pixelSortRendererMode0.pushMatrix();
         pixelSortRendererMode0.translate(i * imageWidth, 0);
         pixelSortRendererMode0.noStroke();
-        pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+        pixelSortRendererMode0.rect(0, 0, imageWidth - volume*5, imageHeight - volume*5);
 
         //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
         pixelSortRendererMode0.popMatrix();
@@ -235,7 +250,7 @@ void mode0() {
       pixelSortRendererMode0.endDraw();
 
 
-      mode0lerp+=volume*10;
+      mode0lerp+=volume*20;
       if (mode0lerp >= 10) {
         mode0counter+=mode0lerp/10;
         mode0lerp = mode0lerp%10;
@@ -244,7 +259,7 @@ void mode0() {
       mode0counter%=imageLoadingLimitMode0-2;
 
       if (tempo%4==0) {
-        tint(255, 150);
+        tint(255, 230);
         image(pixelSortRendererMode0, 0, 0, width, height);
         tint(255, 255);
         fx.render()
