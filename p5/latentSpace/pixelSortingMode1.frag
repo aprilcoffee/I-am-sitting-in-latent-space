@@ -31,7 +31,7 @@ void main() {
   vec4 interpolatedColor = mix(color1, color2, interpolationFactor);
   // && abs(texCoord.y - 0.5) < changing
   float bw = (interpolatedColor.r + interpolatedColor.g +interpolatedColor.b)/3;
-  if(volume>1.5){
+  if(volume>1.25){
     vec4 showColor = vec4(interpolatedColor.r*volume_Low,interpolatedColor.g*volume_Mid*0.7,interpolatedColor.b*volume_High*0.6,volume*bw+0.3);
     if(random(volume)<0.5){
       gl_FragColor = showColor; // Show the interpolated color
@@ -40,7 +40,7 @@ void main() {
       gl_FragColor = interpolatedColor; 
     }
   }else{
-    if(bw < volume*8){
+    if(bw < volume*5){
       gl_FragColor = interpolatedColor; // Show the interpolated color
     }else{
       gl_FragColor = vec4(0.0,0.0,0.0,0.0); // Show the interpolated color

@@ -85,7 +85,7 @@ void mode0() {
       vertex(
         map(i, 0, 1024, 0, width),
         map(waveform.data[i]*3, -1, 1, 0, height),
-        map(abs(512 - i), 0, 512, 0, 5000),
+        map(abs(512 - i), 0, 512, 0, 2500),
 
         map(i, 0, 1024, 0, 1),
         map(waveform.data[i]*3, -1, 1, 0, 1)
@@ -147,7 +147,7 @@ void mode0() {
         pixelSortRendererMode0.noStroke();
         pixelSortRendererMode0.rectMode(CENTER);
         pixelSortRendererMode0.rect(imageWidth/2, imageHeight/2,
-          imageWidth - volume*5, imageHeight - volume*5);
+          imageWidth - volume*3, imageHeight - volume*3);
         pixelSortRendererMode0.rectMode(CORNER);
         //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
         pixelSortRendererMode0.popMatrix();
@@ -238,7 +238,7 @@ void mode0() {
         pixelSortRendererMode0.pushMatrix();
         pixelSortRendererMode0.translate(i * imageWidth, 0);
         pixelSortRendererMode0.noStroke();
-        pixelSortRendererMode0.rect(0, 0, imageWidth - volume*5, imageHeight - volume*5);
+        pixelSortRendererMode0.rect(0, 0, imageWidth - volume*4, imageHeight - volume*4);
 
         //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
         pixelSortRendererMode0.popMatrix();

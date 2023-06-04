@@ -24,7 +24,7 @@ void mode1() {
   tint(255, 255);
   //blendMode(ADD);
   int k = 0;
-  if (volume > 2) {
+  if (volume > 1.5) {
     k = floor(random(2));
   } else {
     k = floor(random(0));
@@ -39,7 +39,7 @@ void mode1() {
   pixelSortShaderMode1.set("volume_Low", volume_Low);
   pixelSortShaderMode1.set("volume_Mid", volume_Mid);
   pixelSortShaderMode1.set("volume_High", volume_Peak);
-  pixelSortShaderMode1.set("changing", volume*5);
+  pixelSortShaderMode1.set("changing", volume*3);
   pixelSortRendererMode1.beginShape();
   pixelSortRendererMode1.textureMode(NORMAL);
   pixelSortRendererMode1.vertex(0, 0, 0, 0);
@@ -51,7 +51,7 @@ void mode1() {
   //pixelSortRendererMode1.rect(0, 0, width, height);
   pixelSortRendererMode1.endDraw();
   if (modeT==1) {
-    if (volume>0.5 && random(5)<volume) {
+    if (volume>0.75 && random(3)<volume) {
       blendMode(BLEND);
       image(pixelSortRendererMode1, 0, 0, width, height);
       fx.render()
@@ -74,10 +74,10 @@ void mode1() {
       //.blur(30, 10)
       .compose();
   } else {
-    if (volume > 1.5) {
+    if (volume > 1.2) {
       image(pixelSortRendererMode1, 0, 0, width, height);
     } else {
-      tint(255, volume*300);
+      tint(255, volume*150);
       image(pixelSortRendererMode1, 0, 0, width, height);
       tint(255, 255);
     }

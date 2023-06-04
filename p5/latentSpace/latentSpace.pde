@@ -41,8 +41,10 @@ PImage[][] imageGrid2 = new PImage[10][300];
 int imageWidth;
 int imageHeight;
 
-int canvasWidth = 10080;
-int canvasHeight = 944;
+//int canvasWidth = 10080;
+//int canvasHeight = 944;
+int canvasWidth = 3780;
+int canvasHeight = 354;
 int[] imageIndices = new int[10];
 PGraphics imageRenderer;
 
@@ -86,7 +88,7 @@ void setup() {
 
   //size(5040, 472, P3D);
   //size(4000,1000,P3D);
-  size(10080, 944, P3D);
+  size(3780, 354, P3D);
   surface.setResizable(false);
   soundSetup();
   osc_setup();
@@ -119,7 +121,7 @@ void setup() {
 
 
   //Shader Post Fix init
-  smooth(8);
+  smooth(4);
   //customFont = createFont("font/Noto_Serif_JP/NotoSerifJP-Light.otf",80);
   //customFont = createFont("font/sans-serif/SansSerifFLF.otf",80);
   //customFont = createFont("font/Helvetica.ttc", 80);

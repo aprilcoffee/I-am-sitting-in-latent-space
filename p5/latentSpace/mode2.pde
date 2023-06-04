@@ -1,5 +1,5 @@
 ArrayList<Boid> particles;
-int imageLoadingLimitMode2 = 50;
+int imageLoadingLimitMode2 = 200;
 
 
 // Create a particle system object
@@ -65,7 +65,7 @@ void mode2() {
     ps.update();
     ps.display();
 
-    mode2lerp+=volume*2;
+    mode2lerp+=volume*1;
     if (mode2lerp >= 1) {
       mode2counter++;
       mode2lerp = 0;
@@ -105,7 +105,7 @@ void mode2() {
     ps.update();
     ps.display();
 
-    mode2lerp+=volume*2;
+    mode2lerp+=volume*1;
     if (mode2lerp >= 1) {
       mode2counter++;
       mode2lerp = 0;
@@ -130,12 +130,12 @@ void mode2() {
     pixelSortShader.set("imageTex2", allBeach[1][mode2counter+1]);
     pixelSortShader.set("interpolationFactor", mode2lerp);
 
-    pixelSortShader.set("changing", volume*1.5);
+    pixelSortShader.set("changing", volume*0.5);
     pixelSortRenderer.rect(0, 0, width, height);
     pixelSortRenderer.endDraw();
     image(pixelSortRenderer, 0, 0, width, height);
 
-    mode2lerp+=volume*3;
+    mode2lerp+=volume*2;
     if (mode2lerp >= 1) {
       mode2counter++;
       mode2lerp = 0;
@@ -175,7 +175,7 @@ void mode2() {
 
 
 
-    if (volume<1) {
+    if (volume<0.9) {
       blendMode(BLEND);
       image(pixelSortRenderer, 0, 0, width, height);
     } else {
@@ -211,8 +211,8 @@ void mode2() {
         //.blur(30, 10)
         .compose();
     }
-    mode2lerp+=volume*100;
-    if (mode2lerp >= 10) {
+    mode2lerp+=volume*10;
+    if (mode2lerp >= 50) {
       mode2counter+=mode2lerp/10;
       mode2lerp = 0;
       //print("changed");
@@ -231,7 +231,7 @@ class Boid {
     position = new PVector(x, y);
     velocity = PVector.random2D();
     acceleration = new PVector();
-    maxSpeed = 20;
+    maxSpeed = 10;
     maxForce = 0.1;
   }
 
@@ -251,8 +251,8 @@ class Boid {
     PVector alignment = align(boids);
     PVector cohesion = cohere(boids);
 
-    separation.mult(5);
-    alignment.mult(3.0);
+    separation.mult(3);
+    alignment.mult(1.5);
     cohesion.mult(3.0);
 
     applyForce(separation);
@@ -363,7 +363,7 @@ class Boid {
 
   void display(color _col) {
 
-    float triSize=4;
+    float triSize=2;
     float theta = velocity.heading() + radians(90);
     fill(_col, 30);
     noStroke();
@@ -386,19 +386,19 @@ class Particle {
 
   Particle(PVector pos) {
     position = pos.copy();
-    velocity = new PVector(3, 0); // Initial velocity towards the right
+    velocity = new PVector(1.5, 0); // Initial velocity towards the right
     lifespan = 500; // Longer lifespan based on the width of the canvas
-    amplitude = random(5, 20);
+    amplitude = random(5, 10);
     frequency = random(0.01, 0.05);
     theta = 0.0;
   }
 
   void update() {
-    float offsetX = sin(theta) * amplitude*4;
+    float offsetX = sin(theta) * amplitude*3;
     float offsetY = cos(theta) * amplitude/2.0;
     position.add(velocity.copy().mult(0.2).add(offsetX, offsetY));
     theta += frequency;
-    lifespan -= 2.0;
+    lifespan -= 3.0;
     position.x = constrain(position.x, 0, width);
     position.y = constrain(position.y, 0, height);
   }
@@ -417,9 +417,9 @@ class Particle {
     textureMode(IMAGE);
     texture(pixelSortRenderer);
     vertex(0, 0, position.x, position.y);
-    vertex(200, 0, position.x + 200, position.y);
-    vertex(200, 100, position.x + 200, position.y + 100);
-    vertex(0, 100, position.x, position.y + 100);
+    vertex(100, 0, position.x + 100, position.y);
+    vertex(100, 50, position.x + 100, position.y + 50);
+    vertex(0, 50, position.x, position.y + 50);
     endShape();
     popMatrix();
     imageMode(CORNER);
