@@ -1,4 +1,4 @@
-int imageLoadingLimitMode1 = 1000;
+int imageLoadingLimitMode1 = 100;
 void loadAllMode1Image() {
   println("loading Mode 1 images");
   println(hour()+":"+minute()+":"+second());

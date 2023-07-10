@@ -6,16 +6,20 @@ import openai
 import json
 import datetime
 
+
 import argparse
 import math
 
 from pythonosc.dispatcher import Dispatcher
 from pythonosc import osc_server
 from pythonosc import udp_client
+import requests
+url = "http://172.20.10.3:5002/api/tts?text="
+
+import config 
+openai.api_key = config.openai_api_key
 
 
-
-openai.api_key = "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"
 #from playsound import playsound
 
 import os, glob
@@ -112,20 +116,45 @@ def sendOSCtoMax(output):
     parser = argparse.ArgumentParser()
     parser.add_argument("--ip", default="127.0.0.1",
     help="The ip of the OSC server")
-    parser.add_argument("--port", type=int, default=5006,
+    parser.add_argument("--port", type=int, default=10010,
     help="The port the OSC server is listening on")
     args = parser.parse_args()
 
     client = udp_client.SimpleUDPClient(args.ip, args.port)
     client.send_message("/sound", output)
 
+
+
+def sendOSCtoQuestion(output):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default="192.168.0.189",
+    help="The ip of the OSC server")
+    parser.add_argument("--port", type=int, default=5555,
+    help="The port the OSC server is listening on")
+    args = parser.parse_args()
+
+    client = udp_client.SimpleUDPClient(args.ip, args.port)
+    client.send_message("/question", "question:" + output)
+
+def sendOSCtoAnswer(output):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default="192.168.0.189",
+    help="The ip of the OSC server")
+    parser.add_argument("--port", type=int, default=5555,
+    help="The port the OSC server is listening on")
+    args = parser.parse_args()
+
+    client = udp_client.SimpleUDPClient(args.ip, args.port)
+    client.send_message("/answer", "answer:" + output)
+
 def beach_handler(unused_addr, args, volume):
     print(unused_addr,args,volume)
     
-    transcription = "ocean"
+    transcription = "bread"
 
     print("[{0}] ~ {1}".format(args[0], volume))
-    for k in range(1):
+
+    for k in range(volume):
         pick = random.choice(list(language.keys()))
         translator= Translator(to_lang=first2(language[pick]))
         #input_text = "Was ist erst grün und dann rot? Ein Frosch im Mixer."
@@ -145,30 +174,77 @@ def beach_handler(unused_addr, args, volume):
 def voice_handler(unused_addr,args,volume):
     print("go for record audio mode")
     
-    audio_file= open("/Users/AprilCoffee/Documents/GitHub/I-am-sitting-in-latent-space/max/say.wav", "rb")
-    transcript = openai.Audio.transcribe("whisper-1", audio_file)
-    print(transcript.text)
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a tourist, only answering with one or two sentences"},
-            #{"role": "user", "content": "Who won the world series in 2020?"},
-            #{"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
-            {"role": "user", "content": transcript.text}
-        ]
-    )
-    print(response['choices'][0]['message']['content'])
-    output = response['choices'][0]['message']['content']
-    os.system("say -v Alex '"+output+"'") 
-    sendOSCtoMax("done")
+    #transcript = openai.Audio.transcribe("whisper-1", audio_file,language="en")
+    #transcript = openai.Audio.transcribe("whisper-1", audio_file,language="en")
+    isFailed = False
 
+    
+    while True:
+        try:   
+            audio_file= open("/Users/AprilCoffee/Documents/GitHub/I-am-sitting-in-latent-space/max/say.wav", "rb")
+            transcript = openai.Audio.transcribe("whisper-1", audio_file,language="en")
+            break
+        except Exception as e:
+            print(e)
+            if 'Invalid' in str(e):
+                print(e)
+                isFailed = True
+                break
+            elif 'Rate' in str(e):
+                print(e)
+    
+    if not isFailed:
+        print(transcript.text)
+
+        input_text = transcript.text
+        sendOSCtoQuestion(input_text)
+
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            temperature = 1.2,
+            messages=[
+                {"role": "system", "content": 
+                '''you are a beach tourism, you are artist
+               '''
+                },
+                
+                #{"role": "system", "content": "give me an instruction of a dance move based on the text, without list numbers"},
+                #{"role": "user", "content": "Who won the world series in 2020?"},
+                #{"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+                {"role": "user", "content": 
+             '''
+             give me sentence based on the following text in ONLY ONE sentence
+             ''' + input_text}
+            ]
+        )
+        print(response['choices'][0]['message']['content'])
+        output = response['choices'][0]['message']['content']
+        #os.system("say -v anna '"+output+"'") 
+        #os.system("say '"+output+"'") 
+        sendOSCtoAnswer(output)
+
+        os.system('say -v Samantha "'+output+'"')
+
+        #os.system("say -v Samantha '"+output+"'") 
+
+
+        #response = requests.get(url + output)
+
+        #os.system("say -v Mei-Jia '"+output+"'") 
+        sendOSCtoMax("done")
+    
 
 def print_compute_handler(unused_addr, args, volume):
   try:
     print("[{0}] ~ {1}".format(args[0], args[1](volume)))
   except ValueError: pass
 
+
+
+
+
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--ip",
     default="127.0.0.1", help="The ip to listen on")
@@ -185,7 +261,5 @@ if __name__ == "__main__":
     server = osc_server.ThreadingOSCUDPServer(
     (args.ip, args.port), dispatcher)
     print("Serving on {}".format(server.server_address))
-    
-    
 
     server.serve_forever()
