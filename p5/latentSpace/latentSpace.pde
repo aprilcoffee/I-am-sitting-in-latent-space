@@ -47,6 +47,11 @@ int imageHeight;
 //int canvasHeight = 944;
 int canvasWidth = 3780;
 int canvasHeight = 354;
+
+int canvasWidth = 3780;
+int canvasHeight = 354;
+
+
 int[] imageIndices = new int[10];
 PGraphics imageRenderer;
 
@@ -91,6 +96,8 @@ void setup() {
   //size(5040, 472, P3D);
   //size(4000,1000,P3D);
   size(3780, 354, P3D);
+
+  //size(10080, 944, P3D);
   surface.setResizable(false);
   soundSetup();
   osc_setup();

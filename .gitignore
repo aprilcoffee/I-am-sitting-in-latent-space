@@ -15,6 +15,10 @@ __pycache__/
 # hide api key
 config.py
 
+*.pkf
+*.asd
+*.wav
+
 # C extensions
 *.so
 
