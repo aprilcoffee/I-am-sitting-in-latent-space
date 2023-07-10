@@ -17,6 +17,29 @@ void loadAllMode1Image() {
   println(hour()+":"+minute()+":"+second());
 }
 
+PImage CachedMode1Image(int imageSpace, int imageIndex) {
+  if (allBeach[imageSpace][imageIndex] == null) {
+
+    String imgstr = "";
+    if (imageSpace == 0) {
+      imgstr = "deforum/img_" + nf(imageIndex, 5) + ".jpg";
+      //allBeach[imageSpace][imageIndex] =  loadImage(imgstr);
+    } else if (imageSpace == 1) {
+      imgstr = "shine/img_" + nf(imageIndex, 5) + ".png";
+
+      //allBeach[imageSpace][imageIndex] =  loadImage(imgstr);
+    } else {
+      imgstr = "deforum/img_" + nf(imageIndex, 5) + ".jpg";
+
+      //allBeach[imageSpace][imageIndex] =  loadImage(imgstr);
+    }
+    return loadImage(imgstr);
+
+    //return allBeach[imageSpace][imageIndex];
+  } else {
+    return allBeach[imageSpace][imageIndex];
+  }
+}
 void mode1() {
   blendMode(BLEND);
   tint(255, 100);
@@ -24,7 +47,7 @@ void mode1() {
   tint(255, 255);
   //blendMode(ADD);
   int k = 0;
-  if (volume > 1.5) {
+  if (volume > 2) {
     k = floor(random(2));
   } else {
     k = floor(random(0));
@@ -32,15 +55,18 @@ void mode1() {
   pixelSortRendererMode1.beginDraw();
   pixelSortRendererMode1.shader(pixelSortShaderMode1);
   pixelSortRendererMode1.clear();
-  pixelSortShaderMode1.set("imageTex1", allBeach[k][mode1counter]);
-  pixelSortShaderMode1.set("imageTex2", allBeach[k][mode1counter+1]);
+  //pixelSortShaderMode1.set("imageTex1", allBeach[k][mode1counter]);
+  //pixelSortShaderMode1.set("imageTex2", allBeach[k][mode1counter+1]);
+
+  pixelSortShaderMode1.set("imageTex1", CachedMode1Image(k, mode1counter));
+  pixelSortShaderMode1.set("imageTex2", CachedMode1Image(k, mode1counter+1));
+
   pixelSortShaderMode1.set("interpolationFactor", mode1lerp);
   pixelSortShaderMode1.set("volume", volume);
   pixelSortShaderMode1.set("volume_Low", volume_Low);
   pixelSortShaderMode1.set("volume_Mid", volume_Mid);
   pixelSortShaderMode1.set("volume_High", volume_Peak);
-  pixelSortShaderMode1.set("changing", volume*3);
-  pixelSortShaderMode1.set("modeT", modeT);
+  pixelSortShaderMode1.set("changing", volume*5);
   pixelSortRendererMode1.beginShape();
   pixelSortRendererMode1.textureMode(NORMAL);
   pixelSortRendererMode1.vertex(0, 0, 0, 0);
@@ -51,17 +77,8 @@ void mode1() {
 
   //pixelSortRendererMode1.rect(0, 0, width, height);
   pixelSortRendererMode1.endDraw();
-  if (modeT==0) {
-    
-    if (volume > 1.2) {
-      image(pixelSortRendererMode1, 0, 0, width, height);
-    } else {
-      tint(255, volume*150);
-      image(pixelSortRendererMode1, 0, 0, width, height);
-      tint(255, 255);
-    }
-  } else if (modeT==1) {
-    if (volume>0.75 && random(3)<volume) {
+  if (modeT==1) {
+    if (volume>0.5 && random(5)<volume) {
       blendMode(BLEND);
       image(pixelSortRendererMode1, 0, 0, width, height);
       fx.render()
@@ -84,12 +101,16 @@ void mode1() {
       //.blur(30, 10)
       .compose();
   } else {
-    if (volume > 1.2) {
+    if (volume > 1.5) {
       image(pixelSortRendererMode1, 0, 0, width, height);
     } else {
       tint(255, volume*150);
       image(pixelSortRendererMode1, 0, 0, width, height);
       tint(255, 255);
+
+      fx.render()
+        .grayScale()
+        .compose();
     }
   }
   mode1counter+=(1+volume);
