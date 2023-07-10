@@ -7,6 +7,8 @@ uniform sampler2D imageTex2;
 uniform float changing;
 uniform float volume;
 
+uniform int modeT;
+
 
 uniform float volume_Low;
 uniform float volume_Mid;

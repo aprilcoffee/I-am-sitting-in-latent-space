@@ -40,6 +40,7 @@ void mode1() {
   pixelSortShaderMode1.set("volume_Mid", volume_Mid);
   pixelSortShaderMode1.set("volume_High", volume_Peak);
   pixelSortShaderMode1.set("changing", volume*3);
+  pixelSortShaderMode1.set("modeT", modeT);
   pixelSortRendererMode1.beginShape();
   pixelSortRendererMode1.textureMode(NORMAL);
   pixelSortRendererMode1.vertex(0, 0, 0, 0);
@@ -50,7 +51,16 @@ void mode1() {
 
   //pixelSortRendererMode1.rect(0, 0, width, height);
   pixelSortRendererMode1.endDraw();
-  if (modeT==1) {
+  if (modeT==0) {
+    
+    if (volume > 1.2) {
+      image(pixelSortRendererMode1, 0, 0, width, height);
+    } else {
+      tint(255, volume*150);
+      image(pixelSortRendererMode1, 0, 0, width, height);
+      tint(255, 255);
+    }
+  } else if (modeT==1) {
     if (volume>0.75 && random(3)<volume) {
       blendMode(BLEND);
       image(pixelSortRendererMode1, 0, 0, width, height);

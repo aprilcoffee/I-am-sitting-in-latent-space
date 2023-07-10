@@ -1,3 +1,5 @@
+//srt://de1.srtminiserver.com:20374?streamid=sub3840
+
 PImage background;
 //Shader PostFix
 import ch.bildspur.postfx.builder.*;
@@ -52,7 +54,7 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 1;
+int mode = 2;
 int movement = 0 ;
 int modeT=0;
 
