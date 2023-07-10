@@ -1,4 +1,4 @@
-int imageLoadingLimitMode1 = 100;
+int imageLoadingLimitMode1 = 10;
 void loadAllMode1Image() {
   println("loading Mode 1 images");
   println(hour()+":"+minute()+":"+second());
@@ -54,6 +54,9 @@ void mode1() {
   }
   pixelSortRendererMode1.beginDraw();
   pixelSortRendererMode1.shader(pixelSortShaderMode1);
+  //pixelSortRendererMode1.shader(gradientMappingShader);
+
+
   pixelSortRendererMode1.clear();
   //pixelSortShaderMode1.set("imageTex1", allBeach[k][mode1counter]);
   //pixelSortShaderMode1.set("imageTex2", allBeach[k][mode1counter+1]);
@@ -109,7 +112,7 @@ void mode1() {
       tint(255, 255);
 
       fx.render()
-        .grayScale()
+        //.grayScale()
         .compose();
     }
   }

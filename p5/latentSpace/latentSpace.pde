@@ -34,6 +34,9 @@ PShader pixelSortShaderMode0;
 PGraphics pixelSortRendererMode1;
 PShader pixelSortShaderMode1;
 
+
+PShader gradientMappingShader;
+
 PImage[][] shine = new PImage[10][300];
 PImage[][] imageGrid0 = new PImage[10][300];
 PImage[][] imageGrid1 = new PImage[10][300];
@@ -59,7 +62,7 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 2;
+int mode = 1;
 int movement = 0 ;
 int modeT=0;
 
@@ -123,7 +126,7 @@ void setup() {
   pixelSortShaderMode1 = loadShader("pixelSortingMode1.frag");
   pixelSortRendererMode1 = createGraphics(canvasWidth, canvasHeight, P3D);
 
-
+  //gradientMappingShader = loadShader("gradientMapping.frag");
 
   //pixelSortShader.set("inputImage", bg);
   //pixelSortShader.set("inputSize", inputSize);
@@ -136,15 +139,15 @@ void setup() {
   //customFont = createFont("font/sans-serif/SansSerifFLF.otf",80);
   //customFont = createFont("font/Helvetica.ttc", 80);
   //println(PFont.list());
-  customFont = createFont("Noto Sans", 80);
-  textFont(customFont);
+  //customFont = createFont("Noto Sans", 80);
+  //textFont(customFont);
   for (int s=0; s<10; s++) {
     cut[s]=loadImage("cuts/img_"+nf(s+1, 2)+".jpg");
     mask[0][s]=loadImage("mask/1/img_"+nf(s+1, 2)+".jpg");
     mask[1][s]=loadImage("mask/2/img_"+nf(s+1, 2)+".jpg");
   }
 
-  println(width, height);
+  //println(width, height);
   println(imageWidth, imageHeight);
 
   particles = new ArrayList<Boid>();
