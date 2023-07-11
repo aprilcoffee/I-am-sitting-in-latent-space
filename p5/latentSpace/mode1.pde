@@ -1,4 +1,4 @@
-int imageLoadingLimitMode1 = 10;
+int imageLoadingLimitMode1 = 100;
 void loadAllMode1Image() {
   println("loading Mode 1 images");
   println(hour()+":"+minute()+":"+second());
@@ -63,6 +63,7 @@ void mode1() {
 
   pixelSortShaderMode1.set("imageTex1", CachedMode1Image(k, mode1counter));
   pixelSortShaderMode1.set("imageTex2", CachedMode1Image(k, mode1counter+1));
+  pixelSortShaderMode1.set("modeT", modeT);
 
   pixelSortShaderMode1.set("interpolationFactor", mode1lerp);
   pixelSortShaderMode1.set("volume", volume);
@@ -80,7 +81,19 @@ void mode1() {
 
   //pixelSortRendererMode1.rect(0, 0, width, height);
   pixelSortRendererMode1.endDraw();
-  if (modeT==1) {
+  if (modeT==0) {
+    if (volume > 1.5) {
+      image(pixelSortRendererMode1, 0, 0, width, height);
+    } else {
+      tint(255, 255);
+      image(pixelSortRendererMode1, 0, 0, width, height);
+      tint(255, 255);
+
+      fx.render()
+        //.grayScale()
+        .compose();
+    }
+  } else if (modeT==1) {
     if (volume>0.5 && random(5)<volume) {
       blendMode(BLEND);
       image(pixelSortRendererMode1, 0, 0, width, height);
@@ -107,7 +120,7 @@ void mode1() {
     if (volume > 1.5) {
       image(pixelSortRendererMode1, 0, 0, width, height);
     } else {
-      tint(255, volume*150);
+      tint(255, 255);
       image(pixelSortRendererMode1, 0, 0, width, height);
       tint(255, 255);
 

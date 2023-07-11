@@ -31,23 +31,28 @@ float random(float seed){
   return fract(sin(dot(seedv2,vec2(12.9898,78.233)))*43758.5453);
 }
 
-void initializeColors() {
-  for (int i = 0; i <= n; i++) {
-    a[i] = vec3(random(0.5), random(0.5), random(0.5));
-    b[i] = vec3(random(0.5), random(0.5), random(0.5));
-  }
+vec3 randomColor(float seed){
+  vec3 color;
+  color.r = random(seed);
+  color.g = random(seed + 1.0);
+  color.b = random(seed + 2.0);
+  return color;
 }
 
+void initializeColors() {
+  for (int i = 0; i <= n; i++) {
+    a[i] = randomColor(float(i));
+    b[i] = randomColor(float(i + n));
+  }
+}
 bool isInitialized = false; // Flag to track initialization
 
-vec4 gradientMap(float p) {
+vec4 gradientMap(int p) {
   float step = 256.0 / float(n);
-  float group = floor(p / step);
-  float lerping = (p - (group * step)) / step;
+  int group = int(floor(float(p) / step));
+  float lerping = map(float(p % int(step)), 0.0, step, 0.0, 1.0);
 
-  //vec3 colorA = mix(a[int(group)], a[int(group) + 1], lerping);
-  //vec3 colorB = mix(b[int(group)], b[int(group) + 1], lerping);
-  vec3 colorMapped = mix(colorMap[int(group)], colorMap[int(group) + 1], lerping);
+  vec3 colorMapped = mix(colorMap[group], colorMap[group + 1], lerping);
 
   return vec4(colorMapped, 1.0);
 }
@@ -59,9 +64,9 @@ void main() {
   }
 
   vec2 texCoord = vertTexCoord.st;
-  
   vec4 color1 = texture2D(imageTex1, texCoord);
   vec4 color2 = texture2D(imageTex2, texCoord);
+  
   
   vec4 interpolatedColor = mix(color1, color2, interpolationFactor);
   //float bw = (interpolatedColor.r + interpolatedColor.g + interpolatedColor.b) / 3.0;
@@ -80,7 +85,7 @@ void main() {
     for (int j = 0; j < n; j++) {
       colorMap[j] = mix(a[j], b[j], volume);
     }
-    vec4 gradientMappedColor = gradientMap(bw*255);
+    vec4 gradientMappedColor = gradientMap(int(bw*255));
     gl_FragColor = gradientMappedColor;
 
     //if(bw < volume*5){

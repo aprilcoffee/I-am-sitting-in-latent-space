@@ -15,11 +15,10 @@ float random(float seed){
   return fract(sin(dot(seedv2, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-
 void initializeColors() {
   for (int i = 0; i <= n; i++) {
-    a[i] = vec3(random(0.5), random(0.5), random(0.5)) / 255.0;
-    b[i] = vec3(random(0.5), random(0.5), random(0.5)) / 255.0;
+    a[i] = vec3(random(0.5), random(0.5), random(0.5));
+    b[i] = vec3(random(0.5), random(0.5), random(0.5));
   }
 }
 
