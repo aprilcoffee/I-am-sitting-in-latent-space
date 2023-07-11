@@ -85,9 +85,12 @@ void main() {
     for (int j = 0; j < n; j++) {
       colorMap[j] = mix(a[j], b[j], volume);
     }
-    vec4 gradientMappedColor = gradientMap(int(bw*255));
-    gl_FragColor = gradientMappedColor;
-
+    if(bw < volume){      
+      vec4 gradientMappedColor = gradientMap(int(bw*255));
+      gl_FragColor = gradientMappedColor;
+    }else{
+      gl_FragColor = vec4(0.0,0.0,0.0,0.0);
+    }
     //if(bw < volume*5){
     //  gl_FragColor = interpolatedColor; // Show the interpolated color
     //}else{

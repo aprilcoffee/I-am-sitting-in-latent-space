@@ -213,7 +213,7 @@ def voice_handler(unused_addr,args,volume):
                 #{"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
                 {"role": "user", "content": 
              '''
-             give me sentence based on the following text in ONLY ONE sentence
+            請基於輸入的文字，回答我關於海洋的問題，只能用一句話回應。
              ''' + input_text}
             ]
         )
@@ -223,14 +223,14 @@ def voice_handler(unused_addr,args,volume):
         #os.system("say '"+output+"'") 
         sendOSCtoAnswer(output)
 
-        os.system('say -v Samantha "'+output+'"')
+        #os.system('say -v Samantha "'+output+'"')
 
         #os.system("say -v Samantha '"+output+"'") 
 
 
         #response = requests.get(url + output)
 
-        #os.system("say -v Mei-Jia '"+output+"'") 
+        os.system("say -v Mei-Jia '"+output+"'") 
         sendOSCtoMax("done")
     
 
