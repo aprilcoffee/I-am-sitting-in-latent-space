@@ -105,7 +105,8 @@ void setup() {
   surface.setResizable(false);
   soundSetup();
   osc_setup();
-  frameRate(30);
+  frameRate(30);    hint(DISABLE_DEPTH_TEST);
+
 
   black = loadImage("black.jpg");
   bg = loadImage("bg.jpg");
