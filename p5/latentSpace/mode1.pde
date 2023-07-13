@@ -2,21 +2,6 @@ int imageLoadingLimitMode1 = 20;
 
 
 
-// grid definition horizontal
-int uCount = 30;
-float uMin = 0;
-float uMax = 5;
-
-// grid definition vertical
-int vCount = 30;
-float vMin = -1;
-float vMax = 1;
-
-// view rotation
-int offsetX = 0, offsetY = 0, clickX = 0, clickY = 0;
-float rotationX = 1, rotationY = 0.3, targetRotationX = 0, targetRotationY = 0, clickRotationX, clickRotationY;
-
-
 void loadAllMode1Image() {
   println("loading Mode 1 images");
   println(hour()+":"+minute()+":"+second());
@@ -58,11 +43,11 @@ PImage CachedMode1Image(int imageSpace, int imageIndex) {
     return allBeach[imageSpace][imageIndex];
   }
 }
+boolean mode1NewCount = false;
+int temp_h = floor(height/2);
 void mode1() {
-  blendMode(BLEND);
-  tint(255, 100);
-  image(black, 0, 0, width, height);
-  tint(255, 255);
+  float fc = float(frameCount);
+
   //blendMode(ADD);
   int k = 0;
   if (modeT==0) {
@@ -103,62 +88,68 @@ void mode1() {
   //pixelSortRendererMode1.rect(0, 0, width, height);
   pixelSortRendererMode1.endDraw();
   if (modeT==0) {
+    blendMode(BLEND);
 
-    tint(255, 100);
-    int temp_h = floor(height/2);
-    int temp_thick = floor(volume*200);
+    int temp_thick = floor(50*abs(cos(radians(fc*10))));
+    if (frameCount % 18 == 0) {
+      temp_h = floor(random(height/4, height/4*3));
+    }
+    tint(255, temp_thick);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
+
+    tint(255, 5);
     copy(pixelSortRendererMode1,
       0, temp_h, width, temp_thick,
       0, temp_h, width, temp_thick);
     copy(pixelSortRendererMode1,
       0, temp_h, width, -temp_thick,
       0, temp_h, width, -temp_thick);
-
-
     //image(pixelSortRendererMode1, 0, 0, width, height);
     tint(255, 255);
 
-    mode1counter+=0.1;
+    mode1counter+=1;
     if (mode1lerp >= 10) {
       mode1counter+=floor((mode1lerp/10.0));
       mode1lerp = 0;
       //print("changed");
     }
+
     mode1counter%=imageLoadingLimitMode1-1;
-  } else if (modeT==1) {
-
-    setView();
-    
-    //scale(200);
-    fill(255);
-    strokeWeight(1);
-    noStroke();
-    for (float iv = vCount-1; iv >= 0; iv--) {
-      beginShape(QUAD_STRIP);
-
-      texture(pixelSortRendererMode1);
-      textureMode(NORMAL);
-      for (float iu = 0; iu <= uCount; iu++) {
-        float u = map(iu, 0, uCount, uMin, uMax); 
-        float v = map(iv, 0, vCount, vMin, vMax);
-
-        float textureU = map(iu, 0, uCount, 0, 1);
-        float textureV = map(iv, 0, vCount, 0, 1);
-        float textureV2 = map(iv+1, 0, vCount, 0, 1);
-        float x = 0.75*v;
-        float y = sin(u)*v;
-        float z = cos(u)*cos(v);
-        vertex(x*500, y*100, z*100, textureU, textureV );
-
-        v = map(iv+1, 0, vCount, vMin, vMax);
-        x = 0.75*v;
-        y = sin(u)*v;
-        z = cos(u)*cos(v);
-        vertex(x*500, y*100, z*100, textureU, textureV2);
-      }
-      endShape();
+    if (mode1counter==0) {
     }
+  } else if (modeT==1) {
+    blendMode(BLEND);
+    tint(255, 50);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
 
+    image(pixelSortRendererMode1, 0, 0, width, height);
+
+
+    mode1counter+=(1);
+    if (mode1lerp >= 1) {
+      mode1counter+=floor((mode1lerp/10.0));
+      mode1lerp = 0;
+      //print("changed");
+    }
+    mode1counter%=imageLoadingLimitMode1-1;
+    //blendMode(ADD);
+    fx.render()
+      //.sobel()
+      //.bloom(0.1, 20, 30)
+      .blur(10, 0.5)
+      //.toon()
+      //.brightPass(0.1)
+      //.blur(30, 10)
+      .compose();
+  } else if (modeT==2) {
+    blendMode(BLEND);
+    tint(255, 50);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
+
+    image(pixelSortRendererMode1, 0, 0, width, height);
 
 
     mode1counter+=(1+volume);
@@ -168,7 +159,12 @@ void mode1() {
       //print("changed");
     }
     mode1counter%=imageLoadingLimitMode1-1;
-  } else if (modeT==2) {
+   
+  } else if (modeT==3) {
+    blendMode(BLEND);
+    tint(255, 50);
+    image(black, 0, 0, width, height);
+    tint(255, 255);
     if (volume>0.5 && random(5)<volume) {
       blendMode(BLEND);
       image(pixelSortRendererMode1, 0, 0, width, height);
@@ -220,12 +216,4 @@ void mode1() {
     }
     mode1counter%=imageLoadingLimitMode1-1;
   }
-}
-
-
-void setView() {
-  translate(width*0.5, height*0.5);
-
-  rotateX(-rotationY);
-  rotateY(rotationX);
 }

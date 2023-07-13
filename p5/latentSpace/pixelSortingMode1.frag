@@ -74,8 +74,24 @@ void main() {
   if (modeT == 0) {
     gl_FragColor = bwColor; // Show the interpolated color
   } else if (modeT == 1) {
-    gl_FragColor = bwColor;
+
+    if (bw < 0.5 || random(bw) > 0.8) {
+      gl_FragColor = bwColor; // Show the interpolated color
+    } else {
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    }
+    //gl_FragColor = ;
   } else if (modeT == 2) {
+   
+
+    if(bw*2 < volume){
+      gl_FragColor = interpolatedColor; // Show the interpolated color
+    }else{
+      gl_FragColor = vec4(0.0,0.0,0.0,0.0); // Show the interpolated color
+    }
+
+
+  } else if (modeT == 3) {
     if (volume > 1.25) {
       if (random(volume) < 0.5) {
         gl_FragColor = showColor; // Show the interpolated color
