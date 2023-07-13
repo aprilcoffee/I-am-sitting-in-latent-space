@@ -1,4 +1,4 @@
-int imageLoadingLimitMode1 = 20;
+int imageLoadingLimitMode1 = 500;
 
 
 
@@ -90,7 +90,7 @@ void mode1() {
   if (modeT==0) {
     blendMode(BLEND);
 
-    int temp_thick = floor(50*abs(cos(radians(fc*10))));
+    int temp_thick = floor(50*abs(cos(radians(fc*10)))*volume);
     if (frameCount % 18 == 0) {
       temp_h = floor(random(height/4, height/4*3));
     }
@@ -136,7 +136,7 @@ void mode1() {
     mode1counter%=imageLoadingLimitMode1-1;
     //blendMode(ADD);
     fx.render()
-      //.sobel()
+      .sobel()
       //.bloom(0.1, 20, 30)
       .blur(10, 0.5)
       //.toon()
@@ -159,7 +159,14 @@ void mode1() {
       //print("changed");
     }
     mode1counter%=imageLoadingLimitMode1-1;
-   
+   fx.render()
+        .sobel()
+        .bloom(0.1, 20, 30)
+        //.blur(10, 0.5)
+        //.toon()
+        //.brightPass(0.1)
+        //.blur(30, 10)
+        .compose();
   } else if (modeT==3) {
     blendMode(BLEND);
     tint(255, 50);
