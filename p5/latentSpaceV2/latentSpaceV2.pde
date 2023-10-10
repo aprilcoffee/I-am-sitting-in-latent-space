@@ -128,18 +128,18 @@ void setup() {
   imageRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
   imageRenderer.shader(imageShader);
 
-  pixelSortShader = loadShader("pixelSorting.frag");
+  pixelSortShader = loadShader("pixelSortingMode1.frag");
   pixelSortRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
 
   pixelSortShaderMode0 = loadShader("pixelSortingMode0.frag");
   pixelSortRendererMode0 = createGraphics(canvasWidth, canvasHeight, P3D);
 
 
-  pixelSortShaderMode1 = loadShader("pixelSorting.frag");
+  pixelSortShaderMode1 = loadShader("pixelSortingMode1.frag");
   pixelSortRendererMode1 = createGraphics(canvasWidth, canvasHeight, P3D);
 
 
-  pixelSortShaderMode2 = loadShader("pixelSortingMode1.frag");
+  pixelSortShaderMode2 = loadShader("pixelSortingMode2.frag");
   pixelSortRendererMode2 = createGraphics(canvasWidth, canvasHeight, P3D);
 
   //gradientMappingShader = loadShader("gradientMapping.frag");

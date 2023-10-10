@@ -48,7 +48,7 @@ PImage Cachedmode1Image(int imageSpace, int imageIndex) {
 
     //return allBeachMode2[imageSpace][imageIndex];
   } else {
-    return allBeachMode2[imageSpace][imageIndex];
+    return allBeachMode1[imageSpace][imageIndex];
   }
 }
 void mode1() {
