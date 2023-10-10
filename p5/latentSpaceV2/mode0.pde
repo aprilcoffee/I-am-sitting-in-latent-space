@@ -1,4 +1,4 @@
-int imageLoadingLimitMode0 = 100;
+int imageLoadingLimitMode0 = 10;
 int Mode0constant = 5;
 int morphWhich = 0;
 void loadAllMode0Image() {
@@ -473,12 +473,13 @@ PImage getOriginImage(int imageSpace) {
   return i;
 }
 PImage getCachedImage(int which, int imageSpace, int imageIndex) {
+  
+  
   if (which == 0) {
     if (imageGrid0[imageSpace][imageIndex] == null) {
       //String imageName = "image" + (imageSpace + 1) + "-" + (imageIndex + 1) + ".jpg";
       //String imgstr = "morph/" + str(imageSpace + 1) + "/" + str(imageIndex-1) + ".jpg";
-      String imgstrNew = "mask_morph"+str(which)+"/" + str(imageSpace + 1) + "/" + nf(imageIndex, 5) + ".jpg";
-
+      String imgstrNew = "mask_morph"+str(which)+"/" + str(imageSpace + 1) + "/img_" + nf(imageIndex, 5) + ".jpg";
       imageGrid0[imageSpace][imageIndex] = loadImage(imgstrNew);
     }
     return imageGrid0[imageSpace][imageIndex];
@@ -486,7 +487,7 @@ PImage getCachedImage(int which, int imageSpace, int imageIndex) {
     if (imageGrid1[imageSpace][imageIndex] == null) {
       //String imageName = "image" + (imageSpace + 1) + "-" + (imageIndex + 1) + ".jpg";
       //String imgstr = "morph/" + str(imageSpace + 1) + "/" + str(imageIndex-1) + ".jpg";
-      String imgstrNew = "mask_morph"+str(which)+"/" + str(imageSpace + 1) + "/" + nf(imageIndex, 5) + ".jpg";
+      String imgstrNew = "mask_morph"+str(which)+"/" + str(imageSpace + 1) + "/img_" + nf(imageIndex, 5) + ".jpg";
 
       imageGrid1[imageSpace][imageIndex] = loadImage(imgstrNew);
     }
@@ -496,7 +497,6 @@ PImage getCachedImage(int which, int imageSpace, int imageIndex) {
       //String imageName = "image" + (imageSpace + 1) + "-" + (imageIndex + 1) + ".jpg";
       //String imgstr = "morph/" + str(imageSpace + 1) + "/" + str(imageIndex-1) + ".jpg";
       String imgstrNew = "morph/" + str(imageSpace + 1) + "/" + str(imageIndex) + ".jpg";
-
       imageGrid2[imageSpace][imageIndex] = loadImage(imgstrNew);
     }
     return imageGrid2[imageSpace][imageIndex];

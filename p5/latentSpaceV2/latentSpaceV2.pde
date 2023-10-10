@@ -19,7 +19,10 @@ float sy = 3;
 PImage[] cut = new PImage[10];
 PImage[][] mask = new PImage[2][10];
 
-PImage[][] allBeach = new PImage[10][2000];
+PImage[][] allBeachMode1 = new PImage[10][2000];
+PImage[][] allBeachMode2 = new PImage[10][2000];
+
+
 
 PImage black;
 PShader imageShader;
@@ -34,6 +37,8 @@ PShader pixelSortShaderMode0;
 PGraphics pixelSortRendererMode1;
 PShader pixelSortShaderMode1;
 
+PGraphics pixelSortRendererMode2;
+PShader pixelSortShaderMode2;
 
 PShader gradientMappingShader;
 
@@ -48,8 +53,12 @@ int imageHeight;
 
 //int canvasWidth = 10080;
 //int canvasHeight = 944;
-int canvasWidth = 3780;
-int canvasHeight = 354;
+//int canvasWidth = 3780;
+//int canvasHeight = 354;
+
+int canvasWidth = 1920;
+int canvasHeight = 1038;
+
 
 //int canvasWidth = 1890;
 //int canvasHeight = 177;
@@ -62,7 +71,7 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 1;
+int mode = 0;
 int movement = 0 ;
 int modeT=0;
 
@@ -97,15 +106,17 @@ boolean isRecording = false;
 void setup() {
 
   //size(5040, 472, P3D);
-  //size(4000,1000,P3D);
-  size(3780, 354, P3D);
+  //size(1920, 1080, P3D);
+  size(1920, 1038, P3D);
+  //size(3780, 354, P3D);
   //size(1890, 177, P3D);
 
   //size(10080, 944, P3D);
   surface.setResizable(false);
   soundSetup();
   osc_setup();
-  frameRate(30);    hint(DISABLE_DEPTH_TEST);
+  frameRate(30);
+  hint(DISABLE_DEPTH_TEST);
 
 
   black = loadImage("black.jpg");
@@ -124,8 +135,12 @@ void setup() {
   pixelSortRendererMode0 = createGraphics(canvasWidth, canvasHeight, P3D);
 
 
-  pixelSortShaderMode1 = loadShader("pixelSortingMode1.frag");
+  pixelSortShaderMode1 = loadShader("pixelSorting.frag");
   pixelSortRendererMode1 = createGraphics(canvasWidth, canvasHeight, P3D);
+
+
+  pixelSortShaderMode2 = loadShader("pixelSortingMode1.frag");
+  pixelSortRendererMode2 = createGraphics(canvasWidth, canvasHeight, P3D);
 
   //gradientMappingShader = loadShader("gradientMapping.frag");
 
