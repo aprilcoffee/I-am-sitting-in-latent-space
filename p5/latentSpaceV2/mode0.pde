@@ -234,9 +234,10 @@ void mode0() {
         pixelSortShaderMode0.set("imageTex1", currentImage);
         pixelSortShaderMode0.set("imageTex2", nextImage);
         pixelSortShaderMode0.set("grid", i);
+        pixelSortRendererMode0.rectMode(CENTER);
 
         pixelSortRendererMode0.pushMatrix();
-        pixelSortRendererMode0.translate(i * imageWidth, 0);
+        pixelSortRendererMode0.translate(i * imageWidth + imageWidth/2, imageHeight/2);
         pixelSortRendererMode0.noStroke();
         pixelSortRendererMode0.rect(0, 0, imageWidth - volume*4, imageHeight - volume*4);
 
@@ -248,7 +249,7 @@ void mode0() {
         //imageIndices[i] = (imageIndices[i] + 1) % 100;
       }
       pixelSortRendererMode0.endDraw();
-
+      imageMode(CORNER);
 
       mode0lerp+=volume*20;
       if (mode0lerp >= 10) {
@@ -257,7 +258,6 @@ void mode0() {
         //print("changed");
       }
       mode0counter%=imageLoadingLimitMode0-2;
-
       if (tempo%4==0) {
         tint(255, 230);
         image(pixelSortRendererMode0, 0, 0, width, height);
@@ -277,9 +277,14 @@ void mode0() {
         tint(255, 255);
       }
     } else if (modeT == 2) {
+      tint(255, 100);
+      image(bg, 0, 0, width, height);
+      tint(255, 255);
       pixelSortRendererMode0.clear();
+
       Mode0constant = 20;
-      for (int i = 0; i < 10; i++) {
+      for (int i = 0; i < 2; i++) {
+        i = floor(random(10));
         int currentImageIndex = 0;
         int VolumeHeight = floor(Mode0constant*waveformArray[i]);
 
@@ -292,7 +297,7 @@ void mode0() {
         PImage nextImage;
         pixelSortRendererMode0.shader(pixelSortShaderMode0);
         //pixelSortShaderMode0.set("changing", 0);
-        float changing = 0;
+        float changing = 0.1;
 
 
         currentImage = getCachedImage(2, i, mode0counter);
@@ -304,49 +309,55 @@ void mode0() {
         pixelSortShaderMode0.set("grid", i);
         pixelSortShaderMode0.set("interpolationFactor", mode0lerp/10);
         pixelSortRendererMode0.pushMatrix();
-        pixelSortRendererMode0.translate(i * imageWidth, 0);
+        pixelSortRendererMode0.translate(i * imageWidth + imageWidth/2, imageHeight/2);
+
+        pixelSortRendererMode0.rectMode(CENTER);
+        pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+
         pixelSortRendererMode0.noStroke();
 
 
-        if (currentImageIndex == 0) {
-          currentImage = cut[i];
-        } else {
-          switch(tempo%4) {
-          case 0:
-            if (i==0 || i==9 || i==4|| i==5 ) {
-              changing = 1;
-            } else {
-              pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
-            }
-            break;
-          case 1:
-            if ( i==1 || i==8 ) {
-              changing = 1;
-            } else {
-              pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
-            }
-            break;
-          case 2:
-            if (i==2 || i==7) {
-              changing = 1;
-            } else {
-              pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
-            }
-            break;
-          case 3:
-            if (i==3 || i==6 ) {
-              changing = 1;
-            } else {
-              pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
-            }
-            break;
-          default:
-            print("default");
-            changing = 0;
-            break;
-          }
-        }
 
+        /*
+        if (currentImageIndex == 0) {
+         currentImage = cut[i];
+         } else {
+         switch(tempo%4) {
+         case 0:
+         if (i==0 || i==9 || i==4|| i==5 ) {
+         changing = 1;
+         } else {
+         pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+         }
+         break;
+         case 1:
+         if ( i==1 || i==8 ) {
+         changing = 1;
+         } else {
+         pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+         }
+         break;
+         case 2:
+         if (i==2 || i==7) {
+         changing = 1;
+         } else {
+         pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+         }
+         break;
+         case 3:
+         if (i==3 || i==6 ) {
+         changing = 1;
+         } else {
+         pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
+         }
+         break;
+         default:
+         print("default");
+         changing = 0;
+         break;
+         }
+         }
+         */
         //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
         pixelSortRendererMode0.popMatrix();
         pixelSortRendererMode0.blendMode(BLEND);
@@ -367,14 +378,14 @@ void mode0() {
       tint(255, 255);
 
       if (tempo%4==0) {
-        fx.render()
-          .sobel()
-          .bloom(0.1, 20, 30)
-          //.blur(10, 0.5)
-          //.toon()
-          //.brightPass(0.1)
-          //.blur(30, 10)
-          .compose();
+        //fx.render()
+        //  .sobel()
+        //  .bloom(0.1, 20, 30)
+        //  //.blur(10, 0.5)
+        //  //.toon()
+        //  //.brightPass(0.1)
+        //  //.blur(30, 10)
+        //  .compose();
         SG[0][0]=false;
       }
     } else if (modeT ==3) {
@@ -387,7 +398,7 @@ void mode0() {
       if (VolumeHeight>200)VolumeHeight=200;
       if (random(10)>8.5)showMask=true;
       if (VolumeHeight>50)currentImageIndex=VolumeHeight-50;
-      for (int i = 0; i < 10; i++) {
+      for (int i = 0; i < 3; i++) {
         PImage currentImage;
         if (currentImageIndex == 0) {
           currentImage = cut[i];
@@ -405,10 +416,11 @@ void mode0() {
         pixelSortRendererMode0.shader(pixelSortShaderMode0);
         pixelSortShaderMode0.set("imageTex", currentImage);
         pixelSortRendererMode0.pushMatrix();
-        pixelSortRendererMode0.translate(i * imageWidth, 0);
+        pixelSortRendererMode0.translate(i * imageWidth + imageWidth/2, imageHeight/2);
         pixelSortRendererMode0.noStroke();
         pixelSortRendererMode0.rect(0, 0, imageWidth, imageHeight);
-        //pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
+
+       // pixelSortRendererMode0.image(currentImage, 0, 0, imageWidth, imageHeight);
         pixelSortRendererMode0.popMatrix();
         pixelSortRendererMode0.blendMode(BLEND);
 
@@ -473,8 +485,8 @@ PImage getOriginImage(int imageSpace) {
   return i;
 }
 PImage getCachedImage(int which, int imageSpace, int imageIndex) {
-  
-  
+
+
   if (which == 0) {
     if (imageGrid0[imageSpace][imageIndex] == null) {
       //String imageName = "image" + (imageSpace + 1) + "-" + (imageIndex + 1) + ".jpg";

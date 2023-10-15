@@ -17,6 +17,7 @@ NetAddress myRemoteLocation;
 
 boolean[][] SG;
 float[][] CN;
+float[] MD;
 float[] mixerVolume;
 float mixerVolume_max = 0;
 int mixerLargest = 0;
@@ -42,6 +43,7 @@ void osc_setup() {
   oscP5.plug(this, "modeT", "/modeT");
   oscP5.plug(this, "movement", "/movement");
   oscP5.plug(this, "con", "/con");
+  oscP5.plug(this, "mod", "/mod");
   oscP5.plug(this, "linear", "/linear");
   oscP5.plug(this, "bpm", "/bpm");
   oscP5.plug(this, "overall_volume", "/overall_volume");
@@ -50,6 +52,8 @@ void osc_setup() {
 
 
   oscP5.plug(this, "voice", "/voice");
+  oscP5.plug(this, "question", "/question");
+  oscP5.plug(this, "answer", "/answer");
 
   //dualshock controller
 
@@ -68,5 +72,10 @@ void osc_setup() {
     for (int x=0; x<10; x++) {
       CN[x][y] = 0;
     }
+  }
+
+  MD = new float[10];
+  for (int x=0; x<10; x++) {
+    MD[x] = 0 ;
   }
 }

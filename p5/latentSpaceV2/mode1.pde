@@ -437,11 +437,12 @@ class Particle {
     imageMode(CENTER);
     beginShape();
     textureMode(IMAGE);
+    int textureSize = 50;
     texture(pixelSortRenderer);
     vertex(0, 0, position.x, position.y);
-    vertex(100, 0, position.x + 100, position.y);
-    vertex(100, 50, position.x + 100, position.y + 50);
-    vertex(0, 50, position.x, position.y + 50);
+    vertex(textureSize, 0, position.x + textureSize, position.y);
+    vertex(textureSize, textureSize/2, position.x + textureSize, position.y + textureSize/2);
+    vertex(0, textureSize/2, position.x, position.y + textureSize/2);
     endShape();
     popMatrix();
     imageMode(CORNER);

@@ -100,17 +100,28 @@ print(transcription)
 os.system("play "+choiceFile+"&") 
 time.sleep(5)
 '''
-def sendOSCtoVisual(output):
+def sendOSCtoVisual_question(output):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ip", default="172.17.2.40",
+    parser.add_argument("--ip", default="127.0.0.1",
     help="The ip of the OSC server")
     parser.add_argument("--port", type=int, default=12001,
     help="The port the OSC server is listening on")
     args = parser.parse_args()
 
     client = udp_client.SimpleUDPClient(args.ip, args.port)
-    client.send_message("/voice", output)
+    client.send_message("/question", output)
 
+
+def sendOSCtoVisual_answer(output):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default="127.0.0.1",
+    help="The ip of the OSC server")
+    parser.add_argument("--port", type=int, default=12001,
+    help="The port the OSC server is listening on")
+    args = parser.parse_args()
+
+    client = udp_client.SimpleUDPClient(args.ip, args.port)
+    client.send_message("/answer", output)
 
 def sendOSCtoMax(output):
     parser = argparse.ArgumentParser()
@@ -199,6 +210,7 @@ def voice_handler(unused_addr,args,volume):
         input_text = transcript.text
         sendOSCtoQuestion(input_text)
 
+        sendOSCtoVisual_question(input_text)
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             temperature = 1.2,
@@ -213,7 +225,8 @@ def voice_handler(unused_addr,args,volume):
                 #{"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
                 {"role": "user", "content": 
              '''
-            請基於輸入的文字，回答我關於海洋的問題，只能用一句話回應。
+            Based on the input, generate an direct answer creatively, only with ONE sentence, 
+            DO NOT do any contraction in the answer sentence
              ''' + input_text}
             ]
         )
@@ -221,16 +234,21 @@ def voice_handler(unused_addr,args,volume):
         output = response['choices'][0]['message']['content']
         #os.system("say -v anna '"+output+"'") 
         #os.system("say '"+output+"'") 
-        sendOSCtoAnswer(output)
 
+        sendOSCtoAnswer(output)
+        sendOSCtoVisual_answer(output)
+        
         #os.system('say -v Samantha "'+output+'"')
+
+        command = "say -v Samantha '" + output + "'"
+        os.system(command)
 
         #os.system("say -v Samantha '"+output+"'") 
 
 
         #response = requests.get(url + output)
 
-        os.system("say -v Mei-Jia '"+output+"'") 
+        #os.system("say -v Mei-Jia '"+output+"'") 
         sendOSCtoMax("done")
     
 

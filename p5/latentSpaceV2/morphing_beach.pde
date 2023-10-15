@@ -78,7 +78,7 @@ void morphing_beach() {
   textSize(100);
   for (int s=0; s<width; s+=500) {
     //showText = "你好";
-    text(showText, s, height/2+100);
+    //text(showText, s, height/2+100);
   }
 
   if (frameCount%10==0) {

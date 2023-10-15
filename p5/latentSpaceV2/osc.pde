@@ -1,6 +1,19 @@
-public void voice(String str){
-    println(str);
-    showText = str;
+public void question(String str) {
+
+  targetQuestion = str;
+
+  //String randomSentence = generateRandomSentence();
+  if (!targetQuestion.equals(question.getCurrentText())) {
+    question.update(targetQuestion);
+    question.isTransitionComplete = false; // Set transition to not complete
+  }
+}
+public void answer(String str) {
+  targetAnswer = str;
+  if (!targetAnswer.equals(answer.getCurrentText())) {
+    answer.update(targetAnswer);
+    answer.isTransitionComplete = false; // Set transition to not complete
+  }
 }
 public void sig(int a, int b) {
   SG[a][b] = true;
@@ -16,9 +29,12 @@ public void con(int a, int b, float c) {
   //print("get con\t");
   //println(a, b, c);
 }
+public void mod(int a, float b) {
+  MD[a] = b;
+}
 public void recording(int a) {
-  if(a==0) isRecording = false;
-  else if(a==1) isRecording = true;
+  if (a==0) isRecording = false;
+  else if (a==1) isRecording = true;
   //println(a, b);
 
 
@@ -40,8 +56,6 @@ public void mixer_volume(int _gate, float _mixer_volume) {
     mixerVolume[4] = _mixer_volume;
     break;
   }
-  
-  
 }
 public void overall_volume(float _overall_volume) {
   overall_volume = abs(_overall_volume);

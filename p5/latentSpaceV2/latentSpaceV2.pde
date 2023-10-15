@@ -40,6 +40,7 @@ PShader pixelSortShaderMode1;
 PGraphics pixelSortRendererMode2;
 PShader pixelSortShaderMode2;
 
+PGraphics gradientMappingRenderer;
 PShader gradientMappingShader;
 
 PImage[][] shine = new PImage[10][300];
@@ -47,6 +48,9 @@ PImage[][] imageGrid0 = new PImage[10][300];
 PImage[][] imageGrid1 = new PImage[10][300];
 PImage[][] imageGrid2 = new PImage[10][300];
 
+
+
+PImage[] landscape = new PImage[300];
 
 int imageWidth;
 int imageHeight;
@@ -71,7 +75,7 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = 0;
+int mode = -1;
 int movement = 0 ;
 int modeT=0;
 
@@ -81,7 +85,10 @@ float ori_camX = canvasWidth/2.0, ori_camY =  canvasHeight/2.0, ori_camZ = (canv
 
 
 PFont customFont;
-String showText = "";
+String targetQuestion = "";
+String showQuestion = "";
+String targetAnswer = "";
+String showAnswer = "";
 
 boolean loadInit = false;
 
@@ -128,6 +135,12 @@ void setup() {
   imageRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
   imageRenderer.shader(imageShader);
 
+
+  gradientMappingShader = loadShader("gradientMap.frag");
+  gradientMappingRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
+  gradientMappingRenderer.shader(gradientMappingShader);
+
+
   pixelSortShader = loadShader("pixelSortingMode1.frag");
   pixelSortRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
 
@@ -148,6 +161,8 @@ void setup() {
   //pixelSortShader.set("inputSize", inputSize);
   //pixelSortShader.set("canvasSize", canvasSize);
 
+  question = new textGenerator("");
+  answer = new textGenerator("");
 
   //Shader Post Fix init
   smooth(4);
@@ -214,19 +229,20 @@ void draw() {
     modeInit();
     break;
   case 0:
-    mode0();
+    modeInit();
     //println("hi");
     break;
   case 1:
-    mode1();
+    mode0();
     break;
   case 2:
-    mode2();
+    mode1();
     break;
   case 3:
-    modeInit();
+    mode2();
     break;
   case 4:
+    modeInit();
 
     break;
   case 5:
@@ -247,5 +263,6 @@ void draw() {
 
   blendMode(BLEND);
   //showFPS();
+  showSubtitle();
   if (frameCount%10==0)println(volume);
 }
