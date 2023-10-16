@@ -69,6 +69,7 @@ public void mode(int a) {
   println("changeMode: "+str(a));
   mode = a;
   modeT = 0;
+  resetCam();
 }
 public void modeT(int a) {
   println("changeModeT: "+str(a));

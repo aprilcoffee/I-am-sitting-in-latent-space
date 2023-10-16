@@ -11,7 +11,7 @@ PImage CachedLandscape(int imageIndex) {
   return landscape[imageIndex];
 }
 int landscapeCounter = 0;
-void modeInit() {
+void modeLandscapeData() {
   tint(255);
   if (modeT == 0) {
 
@@ -28,7 +28,7 @@ void modeInit() {
     gradientMappingShader.set("tempo", tempo);
 
     if (tempo%16==0) {
-      println("gogo");
+      //println("gogo");
       gradientMappingShader.set("initialized", false);
     }
     gradientMappingShader.set("ch1", MD[0]);
@@ -57,12 +57,13 @@ void modeInit() {
     //gradientMappingRenderer.image(bg, 0, 0, width, height); // Replace 'bg' with your background image
     gradientMappingShader.set("img", CachedLandscape(landscapeCounter));
 
-    landscapeCounter = floor(map(MD[1], 0, 1, 0, 250));
+    landscapeCounter++;
+    landscapeCounter = floor(map(MD[0], 0, 1, 0, 250));
     gradientMappingShader.set("landscape", CachedLandscape(landscapeCounter));
     gradientMappingShader.set("tempo", tempo);
     gradientMappingShader.set("modeT", modeT);
 
-    gradientMappingShader.set("ch1", MD[0]);
+    gradientMappingShader.set("ch1", map(MD[0],0,1,0.25,0.35));
     gradientMappingShader.set("ch2", MD[1]);
     gradientMappingShader.set("ch3", MD[2]);
     gradientMappingShader.set("ch4", MD[3]);

@@ -43,6 +43,9 @@ PShader pixelSortShaderMode2;
 PGraphics gradientMappingRenderer;
 PShader gradientMappingShader;
 
+PGraphics lcl_ocean_renderer;
+
+
 PImage[][] shine = new PImage[10][300];
 PImage[][] imageGrid0 = new PImage[10][300];
 PImage[][] imageGrid1 = new PImage[10][300];
@@ -76,7 +79,7 @@ int counter = 0;
 
 
 int mode = -1;
-int movement = 0 ;
+int movement =0 ;
 int modeT=0;
 
 float camXX = canvasWidth/2.0, camYY = canvasHeight/2.0, camZZ = (canvasHeight/2.0) / tan(PI*30.0 / 180.0);
@@ -109,6 +112,9 @@ int mode2counter = 0;
 float mode2lerp = 0;
 
 boolean isRecording = false;
+
+
+float fc ;
 
 void setup() {
 
@@ -155,7 +161,25 @@ void setup() {
   pixelSortShaderMode2 = loadShader("pixelSortingMode2.frag");
   pixelSortRendererMode2 = createGraphics(canvasWidth, canvasHeight, P3D);
 
+
+  lcl_ocean_renderer= createGraphics(canvasWidth, canvasHeight, P3D);
+
   //gradientMappingShader = loadShader("gradientMapping.frag");
+
+  lcl = createGraphics(800, 800, P3D);
+
+  lcl_ocean = createGraphics(canvasHeight, canvasHeight, P3D);
+
+  wave_texture = loadImage("wave.jpg");
+  for (int z=0; z<100; z++) {
+    lcl_fix_x = 0;
+    lcl_fix_z -= 0.5;
+    for (int x=0; x<2000; x++) {
+      lcl_fix_x += 0.01;
+      wave[x][z] = noise(lcl_fix_x, lcl_fix_z)*150;
+      wave_target[x][z] = noise(lcl_fix_x, lcl_fix_z)*150;
+    }
+  }
 
   //pixelSortShader.set("inputImage", bg);
   //pixelSortShader.set("inputSize", inputSize);
@@ -190,7 +214,9 @@ void setup() {
   }
   background(0);
   hint(DISABLE_DEPTH_TEST);
-
+  lcl_ocean_renderer.beginDraw();
+  lcl_ocean_renderer.hint(DISABLE_DEPTH_TEST);
+  lcl_ocean_renderer.endDraw();
   ps = new ParticleSystem(new PVector(0, canvasHeight/2));
 }
 boolean loadOnce = false;
@@ -201,18 +227,16 @@ void resetCam() {
   camZZ = (height/2.0) / tan(PI*30.0 / 180.0);
 }
 void draw() {
-
+  fc = float(frameCount);
 
   float easing = 0.3;
   // camX = 0, camY = 0, camZ = 1000;
   camX += (camXX-camX)*easing;
   camY += (camYY-camY)*easing;
   camZ += (camZZ-camZ)*easing;
-
-  //camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
-  camera(camX, camY, camZ, width/2.0, height/2.0, 0, 0, 1, 0);
-
-
+  //resetCam();
+  camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
+  //camera(camX, camY, camZ, width/2.0, height/2.0, 0, 0, 1, 0);
   pushMatrix();
   //translate(-canvasWidth/2, -canvasHeight/2);
   //mode = 0;
@@ -223,13 +247,12 @@ void draw() {
     loadInit=true;
   }
 
-
   switch(mode) {
   case -1:
-    modeInit();
+    lcl();
     break;
   case 0:
-    modeInit();
+    modeLandscapeData();
     //println("hi");
     break;
   case 1:
@@ -242,7 +265,7 @@ void draw() {
     mode2();
     break;
   case 4:
-    modeInit();
+    modeLandscapeData();
 
     break;
   case 5:
@@ -264,5 +287,5 @@ void draw() {
   blendMode(BLEND);
   //showFPS();
   showSubtitle();
-  if (frameCount%10==0)println(volume);
+  if (frameCount%30==0)println(volume);
 }

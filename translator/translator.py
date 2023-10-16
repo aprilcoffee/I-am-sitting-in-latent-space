@@ -226,7 +226,8 @@ def voice_handler(unused_addr,args,volume):
                 {"role": "user", "content": 
              '''
             Based on the input, generate an direct answer creatively, only with ONE sentence, 
-            DO NOT do any contraction in the answer sentence
+            DO NOT do any contraction in the answer sentence. 
+            DO NOT use any single quote ' 
              ''' + input_text}
             ]
         )

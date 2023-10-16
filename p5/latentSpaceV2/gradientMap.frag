@@ -12,7 +12,7 @@ uniform float ch2 = 1.0;
 uniform float ch3 = 1.0;
 uniform float ch4 = 1.0;
 
- bool initialized = false; // Boolean flag to track initialization
+bool initialized = false; // Boolean flag to track initialization
 uniform float volume;
 
 uniform float tempo = 1.0;
@@ -77,14 +77,14 @@ void main() {
   vec4 interpolatedColor = mix(texColor, gradientMappedColor,ch1);
   
   if(volume>ch1){
-  gl_FragColor = interpolatedColor;
+  gl_FragColor = mix(texColor,interpolatedColor,0.3);
   }
   else{
     if(texColor.r  > 0.8 || texColor.g > 0.8 || texColor.b > 0.8){
       gl_FragColor = vec4(0,0,0,0);
     }
     else{
-      gl_FragColor = interpolatedColor;
+      gl_FragColor = texColor;
     }
   
   }
