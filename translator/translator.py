@@ -161,24 +161,25 @@ def sendOSCtoAnswer(output):
 def beach_handler(unused_addr, args, volume):
     print(unused_addr,args,volume)
     
-    transcription = "bread"
+    transcription = "ocean"
 
     print("[{0}] ~ {1}".format(args[0], volume))
 
-    for k in range(volume):
-        pick = random.choice(list(language.keys()))
-        translator= Translator(to_lang=first2(language[pick]))
-        #input_text = "Was ist erst grün und dann rot? Ein Frosch im Mixer."
-        input_text = transcription
-        output = translator.translate(input_text)
-        os.system("say -v "+pick+" '"+output+"' &") 
+    if(volume <5 ):
+        for k in range(volume):
+            pick = random.choice(list(language.keys()))
+            translator= Translator(to_lang=first2(language[pick]))
+            #input_text = "Was ist erst grün und dann rot? Ein Frosch im Mixer."
+            input_text = transcription
+            output = translator.translate(input_text)
+            os.system("say -v "+pick+" '"+output+"' &") 
 
-        #time.sleep(1)
-        print(output)
+            #time.sleep(1)
+            print(output)
 
-        #sendOSCtoVisual(output)
-        
-        #time.sleep(1)s
+            #sendOSCtoVisual(output)
+            
+            #time.sleep(1)s
     
     
 
@@ -216,7 +217,10 @@ def voice_handler(unused_addr,args,volume):
             temperature = 1.2,
             messages=[
                 {"role": "system", "content": 
-                '''you are a beach tourism, you are artist
+                '''
+                you are a machine eager to go to the beach, tourism.
+                you know a lot about the history of beach tourism, history about computer generated images.
+                but you DO NOT directly talk about them! you are still a LLM model. 
                '''
                 },
                 
@@ -227,7 +231,7 @@ def voice_handler(unused_addr,args,volume):
              '''
             Based on the input, generate an direct answer creatively, only with ONE sentence, 
             DO NOT do any contraction in the answer sentence. 
-            DO NOT use any single quote ' 
+            DO NOT USE ANY Quotation mark!!!, the contract any answer
              ''' + input_text}
             ]
         )
@@ -240,6 +244,7 @@ def voice_handler(unused_addr,args,volume):
         sendOSCtoVisual_answer(output)
         
         #os.system('say -v Samantha "'+output+'"')
+        output = output.replace("'", "")
 
         command = "say -v Samantha '" + output + "'"
         os.system(command)

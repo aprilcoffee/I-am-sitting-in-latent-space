@@ -23,7 +23,6 @@ PImage[][] allBeachMode1 = new PImage[10][2000];
 PImage[][] allBeachMode2 = new PImage[10][2000];
 
 
-
 PImage black;
 PShader imageShader;
 
@@ -63,8 +62,8 @@ int imageHeight;
 //int canvasWidth = 3780;
 //int canvasHeight = 354;
 
-int canvasWidth = 1920;
-int canvasHeight = 1038;
+int canvasWidth = 1600;
+int canvasHeight = 900;
 
 
 //int canvasWidth = 1890;
@@ -115,14 +114,17 @@ boolean isRecording = false;
 
 
 float fc ;
+PImage pts;
+
 
 void setup() {
 
   //size(5040, 472, P3D);
   //size(1920, 1080, P3D);
-  size(1920, 1038, P3D);
+  //size(1920, 1038, P3D);
   //size(3780, 354, P3D);
   //size(1890, 177, P3D);
+  fullScreen(P3D);
 
   //size(10080, 944, P3D);
   surface.setResizable(false);
@@ -131,7 +133,7 @@ void setup() {
   frameRate(30);
   hint(DISABLE_DEPTH_TEST);
 
-
+  pts = loadImage("photosensitive.jpg");
   black = loadImage("black.jpg");
   bg = loadImage("bg.jpg");
   imageWidth = canvasWidth / 10;
@@ -145,7 +147,6 @@ void setup() {
   gradientMappingShader = loadShader("gradientMap.frag");
   gradientMappingRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
   gradientMappingRenderer.shader(gradientMappingShader);
-
 
   pixelSortShader = loadShader("pixelSortingMode1.frag");
   pixelSortRenderer = createGraphics(canvasWidth, canvasHeight, P3D);
@@ -190,12 +191,12 @@ void setup() {
 
   //Shader Post Fix init
   smooth(4);
-  //customFont = createFont("font/Noto_Serif_JP/NotoSerifJP-Light.otf",80);
+  customFont = createFont("font/reserve-condensed-semi-bold.ttf", 80);
   //customFont = createFont("font/sans-serif/SansSerifFLF.otf",80);
   //customFont = createFont("font/Helvetica.ttc", 80);
   //println(PFont.list());
   //customFont = createFont("Noto Sans", 80);
-  //textFont(customFont);
+  textFont(customFont);
   for (int s=0; s<10; s++) {
     cut[s]=loadImage("cuts/img_"+nf(s+1, 2)+".jpg");
     mask[0][s]=loadImage("mask/1/img_"+nf(s+1, 2)+".jpg");
@@ -208,8 +209,8 @@ void setup() {
   particles = new ArrayList<Boid>();
 
   for (int i = 0; i < 300; i++) {
-    float x = random(canvasWidth);
-    float y = random(canvasHeight);
+    float x = random(canvasWidth-200);
+    float y = random(canvasHeight-200);
     particles.add(new Boid(x, y));
   }
   background(0);
@@ -217,7 +218,7 @@ void setup() {
   lcl_ocean_renderer.beginDraw();
   lcl_ocean_renderer.hint(DISABLE_DEPTH_TEST);
   lcl_ocean_renderer.endDraw();
-  ps = new ParticleSystem(new PVector(0, canvasHeight/2));
+  ps = new ParticleSystem(new PVector(-300, canvasHeight/2));
 }
 boolean loadOnce = false;
 PImage tempimg;
@@ -248,44 +249,38 @@ void draw() {
   }
 
   switch(mode) {
+
   case -1:
-    lcl();
+    lclInit();
     break;
   case 0:
-    modeLandscapeData();
-    //println("hi");
+    lcl();
     break;
   case 1:
     mode0();
+    //println("hi");
     break;
   case 2:
     mode1();
+
     break;
   case 3:
+
     mode2();
+
     break;
   case 4:
     modeLandscapeData();
 
     break;
   case 5:
-    //mode0();
-    break;
-  case 6:
-    //mode0();
-    break;
-  case 7:
-    //mode0();
-    break;
-  case 8:
-    //mode0();
+lclInit();    //mode0();
     break;
   }
-
+  pretempo = tempo;
   popMatrix();
-
   blendMode(BLEND);
   //showFPS();
   showSubtitle();
-  if (frameCount%30==0)println(volume);
+  if (frameCount%30==0)println("Volume:\t"+volume);
 }

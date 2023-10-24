@@ -62,6 +62,7 @@ public void overall_volume(float _overall_volume) {
 }
 
 public void bpm(int a) {
+  //pretempo = tempo;
   tempo = a;
 }
 

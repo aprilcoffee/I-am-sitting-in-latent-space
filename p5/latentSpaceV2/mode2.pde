@@ -1,4 +1,4 @@
-int imageLoadingLimitmode2 = 500;
+int imageLoadingLimitmode2 = 300;
 
 
 

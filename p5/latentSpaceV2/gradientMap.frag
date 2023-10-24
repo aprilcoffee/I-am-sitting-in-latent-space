@@ -22,6 +22,11 @@ vec4 b[n + 1];
 vec4 colorMap[n + 1];
 
 
+uniform float volume_Low;
+uniform float volume_Mid;
+uniform float volume_High;
+
+
 float random(float seed){
   vec2 seedv2 = vec2(seed, seed);
   return fract(sin(dot(seedv2, vec2(12.9898, 78.233))) * 43758.5453);
@@ -52,7 +57,7 @@ vec4 gradientMap(float p, float mixpoint) {
       colorMap[i] = vec4(mix(a[i], b[i], mixpoint)); // Linear interpolation between 'a' and 'b'
   }
 
-  vec4 interpolatedColor = mix(colorMap[int(group)], colorMap[int(group) + 1], lerping);
+  vec4 interpolatedColor = mix(colorMap[int(group)], colorMap[int(group) + 1], 0.3);
   //vec4 colorMapped = vec4(interpolatedColor.r, interpolatedColor.g, interpolatedColor.b, 1.0);
 
   //vec4 colorMapped = vec4(mix(colorMap[int(group)], colorMap[int(group) + 1], lerping));
@@ -74,12 +79,24 @@ void main() {
 
   vec4 gradientMappedColor = gradientMap(c,ch1);
   
-  vec4 interpolatedColor = mix(texColor, gradientMappedColor,ch1);
-  
-  if(volume>ch1){
-  gl_FragColor = mix(texColor,interpolatedColor,0.3);
+  vec4 interpolatedColor = mix(texColor, gradientMappedColor,1);
+  if(ch1==0){
+      if(texColor.r  > 0.8 || texColor.g > 0.8 || texColor.b > 0.8){
+      gl_FragColor = vec4(0,0,0,0);
+    }
+    else{
+      gl_FragColor = texColor;
+    }
   }
-  else{
+  else if(volume>1 && ch1 == 1.0){
+    if(texColor.r  > 0.7 || texColor.g > 0.7 || texColor.b > 0.7){
+      gl_FragColor = vec4(0,0,0,0);
+    }
+    else{
+      gl_FragColor = mix(texColor,interpolatedColor,1.);
+    }
+  }
+  else {
     if(texColor.r  > 0.8 || texColor.g > 0.8 || texColor.b > 0.8){
       gl_FragColor = vec4(0,0,0,0);
     }

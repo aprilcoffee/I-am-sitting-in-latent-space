@@ -15,16 +15,21 @@ void showFPS() {
 void showSubtitle() {
 
   textSize(200);
-  textAlign(CENTER, BOTTOM);
   fill(255);
   stroke(0);
   //text(str(frameRate), width/2, height/2);
 
-  textSize(35);
   //text(showQuestion, 0, 50, width, 50);
 
   int margin = 200;
+  textAlign(CENTER, TOP);
+  textSize(35);
+
   question.show(margin/2, 50, width-margin, 75);
+
+
+  textAlign(CENTER, BOTTOM);
+  textSize(30);
   answer.show(margin/2, height - 300, width-margin, 200);
 
   //textSize(30);
@@ -61,7 +66,7 @@ class textGenerator {
       boolean transitionComplete = true;
 
       for (int s = 0; s < catchLength; s++) {
-        titleFloat.set(s, titleFloat.get(s) + (titleTargetFloat.get(s) - titleFloat.get(s)) * 0.1);
+        titleFloat.set(s, titleFloat.get(s) + (titleTargetFloat.get(s) - titleFloat.get(s)) * 0.2);
         if ((titleTargetFloat.get(s) - titleFloat.get(s)) < 0.1 && (titleTargetFloat.get(s) - titleFloat.get(s)) > 0) {
           titleFloat.set(s, titleFloat.get(s) + 1);
         }

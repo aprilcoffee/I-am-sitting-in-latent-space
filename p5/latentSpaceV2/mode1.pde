@@ -1,5 +1,5 @@
 ArrayList<Boid> particles;
-int imageLoadingLimitMode1 = 200;
+int imageLoadingLimitMode1 = 100;
 
 
 // Create a particle system object
@@ -66,8 +66,8 @@ void mode1() {
     pixelSortRenderer.beginDraw();
     pixelSortRenderer.shader(pixelSortShader);
     pixelSortRenderer.clear();
-    pixelSortShader.set("imageTex1", Cachedmode1Image(0,mode1counter));
-    pixelSortShader.set("imageTex2", Cachedmode1Image(0,mode1counter+1));
+    pixelSortShader.set("imageTex1", Cachedmode1Image(0, mode1counter));
+    pixelSortShader.set("imageTex2", Cachedmode1Image(0, mode1counter+1));
     pixelSortShader.set("interpolationFactor", mode1lerp);
 
     pixelSortShader.set("changing", volume*2.5);
@@ -75,7 +75,7 @@ void mode1() {
     pixelSortRenderer.endDraw();
     // Add particles to the system
     if (tempo%4==0) {
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 3; i++) {
         ps.addParticle();
       }
     }
@@ -106,8 +106,8 @@ void mode1() {
     pixelSortRenderer.beginDraw();
     pixelSortRenderer.shader(pixelSortShader);
     pixelSortRenderer.clear();
-    pixelSortShader.set("imageTex1", Cachedmode1Image(0,mode1counter));
-    pixelSortShader.set("imageTex2", Cachedmode1Image(0,mode1counter+1));
+    pixelSortShader.set("imageTex1", Cachedmode1Image(0, mode1counter));
+    pixelSortShader.set("imageTex2", Cachedmode1Image(0, mode1counter+1));
     pixelSortShader.set("interpolationFactor", mode1lerp);
 
     pixelSortShader.set("changing", volume*1.5);
@@ -115,7 +115,7 @@ void mode1() {
     pixelSortRenderer.endDraw();
     // Add particles to the system
     if (tempo%4==0) {
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 4; i++) {
         ps.addParticle();
       }
     }
@@ -148,8 +148,8 @@ void mode1() {
     pixelSortRenderer.beginDraw();
     pixelSortRenderer.shader(pixelSortShader);
     pixelSortRenderer.clear();
-    pixelSortShader.set("imageTex1", Cachedmode1Image(1,mode1counter));
-    pixelSortShader.set("imageTex2", Cachedmode1Image(1,mode1counter+1));
+    pixelSortShader.set("imageTex1", Cachedmode1Image(1, mode1counter));
+    pixelSortShader.set("imageTex2", Cachedmode1Image(1, mode1counter+1));
     pixelSortShader.set("interpolationFactor", mode1lerp);
 
     pixelSortShader.set("changing", volume*0.5);
@@ -175,31 +175,32 @@ void mode1() {
     blendMode(ADD);
 
     stroke(0, 0, 230);
-    beginShape();
-    for (int i = 0; i < 1024; i++) {
-      //vertex(
-      // map(i, 0, 1024, 0, width),
-      //  map(waveform.data[i], -1, 1, 0, height)
-      //  );
-    }
-    endShape();
+   
 
     pixelSortRenderer.beginDraw();
     pixelSortRenderer.shader(pixelSortShader);
     pixelSortRenderer.clear();
-    pixelSortShader.set("imageTex1", Cachedmode1Image(0,mode1counter));
-    pixelSortShader.set("imageTex2", Cachedmode1Image(0,mode1counter+1));
+    pixelSortShader.set("imageTex1", Cachedmode1Image(0, mode1counter));
+    pixelSortShader.set("imageTex2", Cachedmode1Image(0, mode1counter+1));
     pixelSortShader.set("interpolationFactor", mode0lerp );
-
     pixelSortShader.set("changing", volume*2);
     pixelSortRenderer.rect(0, 0, width, height);
     pixelSortRenderer.endDraw();
 
 
 
-    if (volume<0.9) {
+    if (tempo%4==0) {
       blendMode(BLEND);
       image(pixelSortRenderer, 0, 0, width, height);
+
+      fx.render()
+        //.sobel()
+        .bloom(0.1, 20, 30)
+        //.blur(10, 0.5)
+        //.toon()
+        //.brightPass(0.1)
+        //.blur(30, 10)
+        .compose();
     } else {
 
       pixelSortRenderer.loadPixels();

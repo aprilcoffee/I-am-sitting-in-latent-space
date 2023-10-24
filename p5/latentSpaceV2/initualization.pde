@@ -24,6 +24,7 @@ int mixerLargest = 0;
 int lastmixerLargest = 0;
 
 int tempo;
+int pretempo;
 float overall_volume;
 void initualLoad() {
   fx = new PostFX(this);

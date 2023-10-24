@@ -6,29 +6,66 @@ PImage wave_texture;
 float lcl_fix_x = 0;
 float lcl_fix_z = 0;
 
-
 PGraphics lcl_ocean;
+
+
+void lclInit() {
+  //soundCheck();
+  //background(0);
+  // camera(1500, -800, 1000, 0, 0, 0, 0, 1, 0);
+
+  camXX = 300*MD[2];
+  camYY = -800 ;
+  camZZ = 1;
+  renderLCL();
+  tint(100 + abs(150*sin(radians(fc))),255);
+  image(lcl_ocean_renderer, 0, 0, width, height);
+  tint(255,255);
+  // blendMode(BLEND);
+  fx.render()
+    //.sobel()
+    .bloom(0.1, 15, 30)
+    .blur(10, 0.2)
+    //.toon()
+    //.brightPass(0.1)
+    //.blur(30, 10)
+    .compose();
+  // blendMode(BLEND);
+  //background(0);
+  //image(lcl, 0, 0, width, height);
+  blendMode(ADD);
+  image(pts, 0, 0, width, height);
+  blendMode(BLEND);
+  surface.setTitle(str(frameRate));
+}
+
+
+
 
 void lcl() {
   //soundCheck();
   //background(0);
   // camera(1500, -800, 1000, 0, 0, 0, 0, 1, 0);
 
-  camXX = 0 ;
-  camYY = -800;
+  camXX = 300*MD[2];
+  camYY = -800 ;
   camZZ = 1;
+
+
 
   if (modeT == 0) {
     tint(255, 195 - volume*2);
     image(black, 0, 0, width, height);
     tint(255, 255);
+    pushMatrix();
+
+
     stroke(#388DFA);
     strokeWeight(1);
 
     //line(0, height*0.23, width, height*0.23);
 
     float newHeight = height*0.23;
-    pushMatrix();
     translate(0, height*0.23);
 
     beginShape();
@@ -37,13 +74,14 @@ void lcl() {
       // Each sample in the data array is between -1 and +1
       vertex(
         map(i, 0, 1024, 0, width),
-        map(waveform.data[i]*3, -1, 1, -25, 25)
+        map(waveform.data[i]*3, -1, 1, -60, 60)
         );
     }
     endShape();
-    popMatrix();
     noStroke();
     strokeWeight(1);
+
+    popMatrix();
     fx.render()
       .sobel()
       .bloom(0.1, 15, map(volume, 0, 3, 30, 1))
@@ -113,7 +151,6 @@ void lcl() {
 
 void renderLCL() {
 
-
   lcl.beginDraw();
   //lcl.clear();
   //lcl.blendMode(BLEND);
@@ -127,13 +164,13 @@ void renderLCL() {
     lcl.height*1.4);
   //println(volume);
 
-
+  println(MD[0]);
   lcl.loadPixels();
   for (int x=0; x<800; x++) {
     for (int y=0; y<800; y++) {
       int pix_loc = y*lcl.width + x;
       color temp_c =  lcl.pixels[pix_loc];
-      if (brightness(temp_c)<(180 + 20*sin(radians(fc*1.05)))) {
+      if (brightness(temp_c)<(160 + 50*(MD[0]))) {
         lcl.pixels[pix_loc] = color(
           255 - abs(dist(x, y, 400, 400))/(3 + volume/3),
           97- abs(dist(x, y, 400, 400))/(3 + volume/3),
