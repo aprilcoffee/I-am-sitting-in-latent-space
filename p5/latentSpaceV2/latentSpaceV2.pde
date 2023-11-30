@@ -62,9 +62,11 @@ int imageHeight;
 //int canvasWidth = 3780;
 //int canvasHeight = 354;
 
-int canvasWidth = 1600;
-int canvasHeight = 900;
+//int canvasWidth = 1600;
+//int canvasHeight = 900;
 
+int canvasWidth = 1920;
+int canvasHeight = 540;
 
 //int canvasWidth = 1890;
 //int canvasHeight = 177;
@@ -77,8 +79,8 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = -1;
-int movement =0 ;
+int mode = 4;
+int movement = 0;
 int modeT=0;
 
 float camXX = canvasWidth/2.0, camYY = canvasHeight/2.0, camZZ = (canvasHeight/2.0) / tan(PI*30.0 / 180.0);
@@ -124,7 +126,9 @@ void setup() {
   //size(1920, 1038, P3D);
   //size(3780, 354, P3D);
   //size(1890, 177, P3D);
-  fullScreen(P3D);
+  
+  size(1920, 540, P3D);
+  //fullScreen(P3D);
 
   //size(10080, 944, P3D);
   surface.setResizable(false);

@@ -23,14 +23,14 @@ void showSubtitle() {
 
   int margin = 200;
   textAlign(CENTER, TOP);
-  textSize(35);
+  textSize(30);
 
   question.show(margin/2, 50, width-margin, 75);
 
 
   textAlign(CENTER, BOTTOM);
   textSize(30);
-  answer.show(margin/2, height - 300, width-margin, 200);
+  answer.show(margin/2, height - 100, width-margin, 200);
 
   //textSize(30);
   //text(showAnswer, 0, height - 300, width, 200);
