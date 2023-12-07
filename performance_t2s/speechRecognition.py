@@ -5,12 +5,18 @@ import config
 import openai
 openai.api_key = config.openai_api_key
 import io
+from textGenerator import TextGenerator
+
+
+generator_response = TextGenerator("you are a beach tourism agency, answer only with one sentence, be a bit creative")    
 
 class AudioRecorder:
-    def __init__(self, sample_rate=44100, duration=3, output_folder="recordings"):
+    def __init__(self, sample_rate=44100, duration=15, output_folder="recordings"):
         self.sample_rate = sample_rate
         self.duration = duration
         self.output_folder = output_folder
+        self.is_recording = False
+        self.audio_data = None
         os.makedirs(output_folder, exist_ok=True)
 
 
@@ -21,6 +27,7 @@ class AudioRecorder:
 
         # Iterate over each device and print input devices
         for idx, device in enumerate(devices):
+            #print(idx,device)
             if device['max_input_channels'] > 0:  # Checks if device can handle input
                 #print(f"Device ID: {idx}")
                 #print(f"Name: {device['name']}")
@@ -28,34 +35,50 @@ class AudioRecorder:
                 #print(f"Default Sample Rate: {device['default_samplerate']}")
                 #print("------")
                 if(device['name'] == 'MacBook Pro Microphone'):
-                    sd.default.device = idx
+                    #sd.default.device = idx
                     return idx,device['max_input_channels']
-            
-  
-    def record_and_transcribe(self, _id = 1,_channels =1, output_file_name="recorded_audio.wav"):
-        output_file_path = os.path.join(self.output_folder, output_file_name)
-        
-        print(f"Recording {self.duration} seconds of audio...")
+            #if device['max_output_channels'] > 0:  # Checks if device can handle output
+                #print(f"Device ID: {idx}")
+                #print(f"Name: {device['name']}")
+                #print(f"Max Output Channels: {device['max_output_channels']}")
+                #print(f"Default Sample Rate: {device['default_samplerate']}")
+                print("------")
+    def set_recording_device(id):
+        sd.default.device = id
 
-        sd.default.device = _id
-        audio_data = sd.rec(int(self.sample_rate * self.duration), samplerate=self.sample_rate, channels=_channels)
+    def start_recording(self):
+        if not self.is_recording:
+            print("Starting recording...")
+            self.is_recording = True
+            self.audio_data = sd.rec(int(self.sample_rate * self.duration), samplerate=self.sample_rate, channels=1, blocking=False)
 
-        sd.wait()  # Wait for the recording to complete
 
-        sf.write(output_file_path, audio_data, self.sample_rate)
+    def stop_recording(self):
+        if self.is_recording:
+            print("Stopping recording...")
+            self.is_recording = False
+            sd.stop()
+            output_file_name = "recorded_audio.wav"
+            output_file_path = os.path.join(self.output_folder, output_file_name)
+            sf.write(output_file_path, self.audio_data, self.sample_rate)
+            print(f"Audio saved to {output_file_path}")
+            transcript = ''
+            with io.open(output_file_path, 'rb') as audio_file:
+                transcript = openai.Audio.transcribe("whisper-1", audio_file, language="en").text
+                print(f"transcription:{transcript}")
+                #return transcript
+            from main import sendOSCtoMax
 
-        print(f"Audio saved to {output_file_path}")
+            input_text,filepath = generator_response.speechGPT(transcript, 0)
+            sendOSCtoMax(0,input_text,filepath)
+            # Add your transcription code here
 
-        audio_file= open(output_file_path, "rb")
-        with io.open(output_file_path, 'rb') as audio_file:
-            transcript = openai.Audio.transcribe("whisper-1", audio_file, language="uk")
-            print(f"transcription:{transcript}")
-            return transcript
         
 
 if __name__ == "__main__":
-    recorder = AudioRecorder(sample_rate=44100, duration=10, output_folder="recordings")
-    recorder.record_and_save(output_file_name="my_recording.wav")
+    pass
+    #recorder = AudioRecorder(sample_rate=44100, duration=10, output_folder="recordings")
+    #recorder.record_and_save(output_file_name="my_recording.wav")
 
 
            
