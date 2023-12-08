@@ -12,11 +12,15 @@ import datetime
 from pydub import AudioSegment
 
 import io
+from deviceChannels import list_output_devices
+
+from sendingOSC import sendOSCtoVisual_question,sendOSCtoVisual_answer
 
 
 class TextGenerator:
-    def __init__(self,_initualize_prompt):
+    def __init__(self,_initualize_prompt, role = 'agent'):
         openai.api_key = config.openai_api_key        
+        self.role = role
         self.messages = [{
                 "role": "system",
                 "content": _initualize_prompt
@@ -55,6 +59,12 @@ class TextGenerator:
             "content": output_text
         }
         self.messages.append(response_message)
+
+
+        if(self.role == 'agent'):
+            sendOSCtoVisual_answer(output_text)
+        elif(self.role == 'tourist'):
+            sendOSCtoVisual_question(output_text)
 
         print("response\t" + output_text)
 
@@ -103,6 +113,12 @@ class TextGenerator:
 
         # Read and play the audio
         data, samplerate = sf.read(output_file_path)
+
+        sd.default.device = None
+        outputing_id,channel = list_output_devices()
+        sd.default.device = outputing_id
+
+
         sd.play(data, samplerate)
         sd.wait()  # Wait until audio is finished playing
         return output_text,output_file_path

@@ -6,9 +6,10 @@ import openai
 openai.api_key = config.openai_api_key
 import io
 from textGenerator import TextGenerator
+from deviceChannels import list_input_devices
+from sendingOSC import sendOSCtoVisual_question,sendOSCtoMax_answer
 
-
-generator_response = TextGenerator("you are a beach tourism agency, answer only with one sentence, be a bit creative")    
+generator_response = TextGenerator("you are a beach tourism agency, answer only with one sentence",role='agent')    
 
 class AudioRecorder:
     def __init__(self, sample_rate=44100, duration=15, output_folder="recordings"):
@@ -19,35 +20,15 @@ class AudioRecorder:
         self.audio_data = None
         os.makedirs(output_folder, exist_ok=True)
 
-
-    def list_input_devices(self):
-        # Query all devices
-        devices = sd.query_devices()
-        print("Listing all input devices:\n")
-
-        # Iterate over each device and print input devices
-        for idx, device in enumerate(devices):
-            #print(idx,device)
-            if device['max_input_channels'] > 0:  # Checks if device can handle input
-                #print(f"Device ID: {idx}")
-                #print(f"Name: {device['name']}")
-                #print(f"Max Input Channels: {device['max_input_channels']}")
-                #print(f"Default Sample Rate: {device['default_samplerate']}")
-                #print("------")
-                if(device['name'] == 'MacBook Pro Microphone'):
-                    #sd.default.device = idx
-                    return idx,device['max_input_channels']
-            #if device['max_output_channels'] > 0:  # Checks if device can handle output
-                #print(f"Device ID: {idx}")
-                #print(f"Name: {device['name']}")
-                #print(f"Max Output Channels: {device['max_output_channels']}")
-                #print(f"Default Sample Rate: {device['default_samplerate']}")
-                print("------")
+                               
     def set_recording_device(id):
         sd.default.device = id
 
     def start_recording(self):
         if not self.is_recording:
+            recording_id,channel = list_input_devices()
+            sd.default.device = recording_id
+            #output_id,channel = recorder.list_output_devices()
             print("Starting recording...")
             self.is_recording = True
             self.audio_data = sd.rec(int(self.sample_rate * self.duration), samplerate=self.sample_rate, channels=1, blocking=False)
@@ -67,10 +48,13 @@ class AudioRecorder:
                 transcript = openai.Audio.transcribe("whisper-1", audio_file, language="en").text
                 print(f"transcription:{transcript}")
                 #return transcript
-            from main import sendOSCtoMax
 
-            input_text,filepath = generator_response.speechGPT(transcript, 0)
-            sendOSCtoMax(0,input_text,filepath)
+            sendOSCtoVisual_question(transcript)
+
+            response,filepath = generator_response.speechGPT(transcript, 0)
+            sendOSCtoMax_answer(0,response,filepath)
+        
+
             # Add your transcription code here
 
         
