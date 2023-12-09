@@ -51,9 +51,11 @@ class AudioRecorder:
 
             sendOSCtoVisual_question(transcript)
 
-            response,filepath = generator_response.speechGPT(transcript, 0)
+
+
+            response,filepath,duration_seconds = generator_response.speechGPT(transcript, 0)
             sendOSCtoMax_answer(0,response,filepath)
-        
+            
 
             # Add your transcription code here
 

@@ -231,7 +231,7 @@ void mode0() {
     if (tempo%4==0) {
       fx.render()
         //.sobel()
-         .grayScale()
+        .grayScale()
         //.bloom(0.1, 20, 30)
         //.blur(10, 0.5)
         //.toon()

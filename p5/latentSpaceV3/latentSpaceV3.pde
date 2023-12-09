@@ -213,8 +213,8 @@ void setup() {
   particles = new ArrayList<Boid>();
 
   for (int i = 0; i < 300; i++) {
-    float x = random(canvasWidth-200);
-    float y = random(canvasHeight-200);
+    float x = random(100, canvasWidth-100);
+    float y = random(100, canvasHeight-100);
     particles.add(new Boid(x, y));
   }
   background(0);

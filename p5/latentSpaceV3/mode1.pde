@@ -166,14 +166,14 @@ void mode1() {
   } else if (modeT==3) {
 
 
-    tint(255, 190);
+    tint(255, 195);
     image(black, 0, 0, width, height);
     tint(255, 255);
 
-    blendMode(ADD);
+
 
     stroke(0, 0, 230);
-   
+
 
     pixelSortRenderer.beginDraw();
     pixelSortRenderer.shader(pixelSortShader);
@@ -187,51 +187,60 @@ void mode1() {
 
 
 
-    if (tempo%4==0) {
-      blendMode(BLEND);
+    if (tempo%16==0) {
+
+      blendMode(ADD);
+
+      tint(255, volume*100);
       image(pixelSortRenderer, 0, 0, width, height);
-
-      fx.render()
-        //.sobel()
-        .bloom(0.1, 20, 30)
-        //.blur(10, 0.5)
-        //.toon()
-        //.brightPass(0.1)
-        //.blur(30, 10)
-        .compose();
-    } else {
-
-      pixelSortRenderer.loadPixels();
-
-      for (Boid boid : particles) {
-
-        int xx = floor(boid.position.x);
-        int yy = floor(boid.position.y);
-
-        if (xx >= pixelSortRenderer.width)xx = pixelSortRenderer.width-1;
-        if (xx <= 0)xx =1;
-        if (yy >= pixelSortRenderer.height)yy = pixelSortRenderer.height-1;
-        if (yy <= 0)yy = 1;
-        int pos = (yy*pixelSortRenderer.width)+xx;
-        color c = pixelSortRenderer.pixels[pos];
-
-        boid.edges();
-        boid.flock(particles);
-        boid.update();
-        boid.display(c);
-      }
-
-      pixelSortRenderer.updatePixels();
-
-      fx.render()
-        .sobel()
-        .bloom(0.1, 20, 30)
-        //.blur(10, 0.5)
-        //.toon()
-        //.brightPass(0.1)
-        //.blur(30, 10)
-        .compose();
+      tint(255, 255);
+      //println("hooho");
     }
+
+
+    //fx.render()
+    //  .sobel()
+    //  .bloom(0.1, 20, 30)
+    //  //.blur(10, 0.5)
+    //  //.toon()
+    //  //.brightPass(0.1)
+    //  //.blur(30, 10)
+    //  .compose();
+
+
+    blendMode(ADD);
+    //println("show this");
+    pixelSortRenderer.loadPixels();
+
+    for (Boid boid : particles) {
+
+      int xx = floor(boid.position.x);
+      int yy = floor(boid.position.y);
+
+      if (xx >= pixelSortRenderer.width)xx = pixelSortRenderer.width-1;
+      if (xx <= 0)xx =1;
+      if (yy >= pixelSortRenderer.height)yy = pixelSortRenderer.height-1;
+      if (yy <= 0)yy = 1;
+      int pos = (yy*pixelSortRenderer.width)+xx;
+      color c = pixelSortRenderer.pixels[pos];
+
+      boid.edges();
+      boid.flock(particles);
+      boid.update();
+      boid.display(c);
+    }
+
+    pixelSortRenderer.updatePixels();
+
+    fx.render()
+      .sobel()
+      .bloom(0.1, 20, 30)
+      //.blur(10, 0.5)
+      //.toon()
+      //.brightPass(0.1)
+      //.blur(30, 10)
+      .compose();
+
     mode1lerp+=volume*10;
     if (mode1lerp >= 50) {
       mode1counter+=mode1lerp/10;
@@ -272,9 +281,9 @@ class Boid {
     PVector alignment = align(boids);
     PVector cohesion = cohere(boids);
 
-    separation.mult(3);
-    alignment.mult(1.5);
-    cohesion.mult(3.0);
+    separation.mult(1.5);
+    alignment.mult(0.75);
+    cohesion.mult(1.5);
 
     applyForce(separation);
     applyForce(alignment);
@@ -370,6 +379,7 @@ class Boid {
   }
 
   void edges() {
+    // print(position);
     if (position.x > width) {
       position.x = 0;
     } else if (position.x < 0) {
@@ -384,7 +394,7 @@ class Boid {
 
   void display(color _col) {
 
-    float triSize=2;
+    float triSize=20;
     float theta = velocity.heading() + radians(90);
     fill(_col, 30);
     noStroke();

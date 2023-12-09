@@ -6,7 +6,7 @@ import requests
 import sounddevice as sd
 import soundfile as sf
 import config
-
+import time
 import os
 import datetime
 from pydub import AudioSegment
@@ -114,14 +114,17 @@ class TextGenerator:
         # Read and play the audio
         data, samplerate = sf.read(output_file_path)
 
-        sd.default.device = None
-        outputing_id,channel = list_output_devices()
-        sd.default.device = outputing_id
+        duration_seconds = len(audio_segment) / 1000.0  # pydub uses milliseconds
+        print(f"Audio file duration: {duration_seconds} seconds")
 
 
-        sd.play(data, samplerate)
-        sd.wait()  # Wait until audio is finished playing
-        return output_text,output_file_path
+        #sd.default.device = None
+        #outputing_id,channel = list_output_devices()
+        #sd.default.device = outputing_id
+
+        #sd.play(data, samplerate)
+        #sd.wait()  # Wait until audio is finished playing
+        return output_text,output_file_path,duration_seconds
 
 if __name__ == "__main__":
     # You can add test code here if needed

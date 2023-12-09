@@ -5,14 +5,14 @@ from pythonosc import osc_server
 from pythonosc import udp_client
 
 import argparse
-
+import time
 from sendingOSC import sendOSCtoVisual_question,sendOSCtoVisual_answer
 from sendingOSC import sendOSCtoMax_answer,sendOSCtoMax_question
 
 from textGenerator import TextGenerator
 from speechRecognition import AudioRecorder
 
-generator_agent = TextGenerator("you are a beach tourism agency, answer only with one sentence, be a bit creative" ,role = 'agent')    
+generator_agent = TextGenerator("you are a beach tourism agency, answer only with one sentence" ,role = 'agent')    
 generator_tourist = TextGenerator("you are a customer going to the beach, answer only with one sentence, be creative, ask random questions, like what is the color of the ocean or so on",role = 'tourist')
 
 loop_running = False
@@ -24,11 +24,14 @@ def conversation():
     #input_text = transrcibe  # Replace with your actual prompt
     input_text = "hello"
     while loop_running:
-        input_text,filepath = generator_agent.speechGPT(input_text, 0)
+        input_text,filepath,duration_seconds = generator_agent.speechGPT(input_text, 0)
         sendOSCtoMax_answer(0,input_text,filepath)
+        time.sleep(duration_seconds+2)
         #sendOSCtoVisual_question(input_text)
-        input_text,filepath = generator_tourist.speechGPT(input_text, 2)
+        input_text,filepath,duration_seconds = generator_tourist.speechGPT(input_text, 2)
         sendOSCtoMax_question(1,input_text,filepath)
+        time.sleep(duration_seconds+2)
+
         #sendOSCtoVisual_answer(input_text)
 
 
