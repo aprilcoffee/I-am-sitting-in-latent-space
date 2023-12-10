@@ -40,10 +40,8 @@ void modeLandscapeData() {
     gradientMappingRenderer.rect(0, 0, width, height);
 
     gradientMappingRenderer.endDraw();
-
+    //println(width);
     image(gradientMappingRenderer, 0, 0, width, height);
-
-
 
     modeLandscapelerp+=volume*20;
     if (modeLandscapelerp >= 10) {

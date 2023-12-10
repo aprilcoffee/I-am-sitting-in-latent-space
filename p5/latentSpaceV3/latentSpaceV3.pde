@@ -128,7 +128,7 @@ void setup() {
   //size(1890, 177, P3D);
 
   size(1920, 1080, P3D);
-  //fullScreen(P3D);
+  //fullScreen(P3D,0);
 
   //size(10080, 944, P3D);
   surface.setResizable(false);
@@ -255,7 +255,8 @@ void draw() {
   switch(mode) {
 
   case -1:
-    lclInit();
+    //lclInit();
+    background(0);
     break;
   case 0:
     lcl();

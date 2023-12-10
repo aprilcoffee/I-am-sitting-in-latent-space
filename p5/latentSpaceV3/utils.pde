@@ -23,16 +23,16 @@ void showSubtitle() {
 
   int margin = 200;
   textAlign(CENTER, TOP);
-  textSize(30);
+  textSize(40);
 
-  question.show(margin/2, 50, width-margin, 75);
+  question.show(margin/2, 55, width-margin, 130);
 
   //question.show(margin/2, 100, width-margin, 100);
   // print("")
 
   textAlign(CENTER, BOTTOM);
-  textSize(30);
-  answer.show(margin/2, 50, width-margin, height-100);
+  textSize(40);
+  answer.show(margin/2, 50, width-margin, height-150);
 
   //textSize(30);
   //text(showAnswer, 0, height - 300, width, 200);

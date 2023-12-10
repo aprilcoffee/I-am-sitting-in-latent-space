@@ -26,11 +26,11 @@ def conversation():
     while loop_running:
         input_text,filepath,duration_seconds = generator_agent.speechGPT(input_text, 0)
         sendOSCtoMax_answer(0,input_text,filepath)
-        time.sleep(duration_seconds+2)
+        time.sleep(duration_seconds+1)
         #sendOSCtoVisual_question(input_text)
         input_text,filepath,duration_seconds = generator_tourist.speechGPT(input_text, 2)
         sendOSCtoMax_question(1,input_text,filepath)
-        time.sleep(duration_seconds+2)
+        time.sleep(duration_seconds+1)
 
         #sendOSCtoVisual_answer(input_text)
 
