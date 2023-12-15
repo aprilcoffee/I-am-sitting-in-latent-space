@@ -36,7 +36,7 @@ void initualLoad() {
 void osc_setup() {
   //Midi Control
   oscP5 = new OscP5(this, 12001);
-  myRemoteLocation = new NetAddress("172.17.2.40", 12001);
+  myRemoteLocation = new NetAddress("127.0.0.1", 12001);
   oscP5.plug(this, "ds", "/ds");
 
   oscP5.plug(this, "sig", "/sig");
