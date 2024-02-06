@@ -2,6 +2,13 @@
 textGenerator question;
 textGenerator answer;
 
+
+PFont customFont;
+String targetQuestion = "";
+String showQuestion = "";
+String targetAnswer = "";
+String showAnswer = "";
+
 void showFPS() {
 
   textSize(200);
@@ -25,14 +32,14 @@ void showSubtitle() {
   textAlign(CENTER, TOP);
   textSize(40);
 
-  question.show(margin/2, 55, width-margin, 130);
+  //question.show(margin/2, 55, width-margin, 130);
 
   //question.show(margin/2, 100, width-margin, 100);
   // print("")
 
   textAlign(CENTER, BOTTOM);
-  textSize(40);
-  answer.show(margin/2, 50, width-margin, height-200);
+  textSize(25);
+  answer.show(margin/2, 50, width-margin, height-75);
 
   //textSize(30);
   //text(showAnswer, 0, height - 300, width, 200);

@@ -12,8 +12,10 @@ from sendingOSC import sendOSCtoMax_answer,sendOSCtoMax_question
 from textGenerator import TextGenerator
 from speechRecognition import AudioRecorder
 
-generator_agent = TextGenerator("you are a beach tourism agency, answer only with one sentence" ,role = 'agent')    
-generator_tourist = TextGenerator("you are a customer going to the beach, answer only with one sentence, be creative, ask random questions, like what is the color of the ocean or so on",role = 'tourist')
+generator_agent = TextGenerator("you are a beach tourism agency, answer only with one short sentence. when asked for recommended location, you are NOT allow to mention location in reality,  you have to instead imagine one" ,role = 'agent')    
+generator_tourist = TextGenerator("you are a customer going to the beach, answer only with one sentence, be creative, ask random questions, like 'what is the color of the ocean' or so on",role = 'tourist')
+#generator_agent = TextGenerator("you are a beach tourism agent, answer only with one short sentence. It is okay to be normal person sometime. NEVER MENTION you are AI" ,role = 'agent')    
+#generator_tourist = TextGenerator("you are a person always interested in beach. answer only with one sentence. You are curious to engage in conversation, continue the conversation.  ask dream related question to the person. start the first question with: 'do you dream'",role = 'tourist')
 
 loop_running = False
 
@@ -22,15 +24,15 @@ def conversation():
     global generator_agent
     global generator_tourist
     #input_text = transrcibe  # Replace with your actual prompt
-    input_text = "hello"
+    input_text = "Hi"
     while loop_running:
         input_text,filepath,duration_seconds = generator_agent.speechGPT(input_text, 0)
         sendOSCtoMax_answer(0,input_text,filepath)
-        time.sleep(duration_seconds+1)
+        time.sleep(duration_seconds+2)
         #sendOSCtoVisual_question(input_text)
         input_text,filepath,duration_seconds = generator_tourist.speechGPT(input_text, 2)
         sendOSCtoMax_question(1,input_text,filepath)
-        time.sleep(duration_seconds+1)
+        time.sleep(duration_seconds+2)
 
         #sendOSCtoVisual_answer(input_text)
 
