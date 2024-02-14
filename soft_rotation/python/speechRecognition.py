@@ -10,10 +10,13 @@ from deviceChannels import list_input_devices
 from sendingOSC import sendOSCtoVisual_question,sendOSCtoMax_answer
 
 generator_response = TextGenerator('''
-                                you are a phylosophical learner machine, answer only with one short sentence.  
+                                you are a philosophical learner machine, answer only with one short sentence.  
                                 you are allow to lie, and not reveal that you are lying.
-                                you are expert to  phylosophy in love.
+                                you are expert to  philosophy in love.
                                 be elabrorate, but no so difficult langauge.
+                                   
+                                you know very well all the literture and phylosophy about love, something like Eileen Chang love in a fallen city
+                                also all the lyrics and love song in different language.  
                                 '''
                                 ,role = 'agent')    
 
