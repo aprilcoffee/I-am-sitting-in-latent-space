@@ -9,6 +9,8 @@ String showQuestion = "";
 String targetAnswer = "";
 String showAnswer = "";
 
+
+
 void showFPS() {
 
   textSize(200);
@@ -30,16 +32,16 @@ void showSubtitle() {
 
   int margin = 200;
   textAlign(CENTER, TOP);
-  textSize(40);
+  textSize(25);
 
-  //question.show(margin/2, 55, width-margin, 130);
+  answer.show(margin/2, 55, width-margin, answerHeight);
 
   //question.show(margin/2, 100, width-margin, 100);
   // print("")
 
   textAlign(CENTER, BOTTOM);
   textSize(25);
-  question.show(margin/2, 50, width-margin, height-75);
+  question.show(margin/2, 50, width-margin, questionHeight);
 
   //textSize(30);
   //text(showAnswer, 0, height - 300, width, 200);

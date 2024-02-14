@@ -9,7 +9,14 @@ from textGenerator import TextGenerator
 from deviceChannels import list_input_devices
 from sendingOSC import sendOSCtoVisual_question,sendOSCtoMax_answer
 
-generator_response = TextGenerator("you are a beach tourism agency, answer only with one sentence",role='agent')    
+generator_response = TextGenerator('''
+                                you are a phylosophical learner machine, answer only with one short sentence.  
+                                you are allow to lie, and not reveal that you are lying.
+                                you are expert to  phylosophy in love.
+                                be elabrorate, but no so difficult langauge.
+                                '''
+                                ,role = 'agent')    
+
 
 class AudioRecorder:
     def __init__(self, sample_rate=44100, duration=15, output_folder="recordings"):

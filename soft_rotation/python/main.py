@@ -28,7 +28,7 @@ generator_tourist = TextGenerator('''
                                   
 
                                 
-                                ''',role = 'client'
+                                ''',role = 'tourist'
                                 )
 
 loop_running = False
@@ -43,6 +43,7 @@ def conversation():
         input_text,filepath,duration_seconds = generator_agent.speechGPT(input_text, 0)
         sendOSCtoMax_answer(0,input_text+"(answer in one, or two short sentence)",filepath)
         time.sleep(duration_seconds)
+        
         #sendOSCtoVisual_question(input_text)
         input_text,filepath,duration_seconds = generator_tourist.speechGPT(input_text, 2)
         sendOSCtoMax_question(1,input_text+"(answer in one, or two short sentence)",filepath)
