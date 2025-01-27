@@ -79,8 +79,8 @@ int[] squareList = {0, 1080, 2160, 3240, 4320, 5400, 6480, 7560, 8640, 9720};
 int counter = 0;
 
 
-int mode = -1;
-int movement = 0;
+int mode = 2;
+int movement = 2;
 int modeT=0;
 
 float camXX = canvasWidth/2.0, camYY = canvasHeight/2.0, camZZ = (canvasHeight/2.0) / tan(PI*30.0 / 180.0);

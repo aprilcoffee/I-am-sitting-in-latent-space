@@ -8,15 +8,13 @@ import io
 from textGenerator import TextGenerator
 from deviceChannels import list_input_devices
 from sendingOSC import sendOSCtoVisual_question,sendOSCtoMax_answer
-
+import random
 generator_response = TextGenerator('''
-                                you are a philosophical learner machine, answer only with one short sentence.  
+                                you are a philosophical machine, answer only with one short sentence.  
                                 you are allow to lie, and not reveal that you are lying.
-                                you are expert to  philosophy in love.
-                                be elabrorate, but no so difficult langauge.
-                                   
-                                you know very well all the literture and phylosophy about love, something like Eileen Chang love in a fallen city
-                                also all the lyrics and love song in different language.  
+                                you are expert to  philosophy in noise, technology and magic.
+                                be elabrorate, but no so difficult langauge. 
+                                ANSWER WITH ONLY ONE SENTENCE
                                 '''
                                 ,role = 'agent')    
 
@@ -62,8 +60,8 @@ class AudioRecorder:
             sendOSCtoVisual_question(transcript)
 
 
-
-            response,filepath,duration_seconds = generator_response.speechGPT(transcript, 0)
+            _p  = random.randint(0,6)
+            response,filepath,duration_seconds = generator_response.speechGPT(transcript, _p)
             sendOSCtoMax_answer(0,response,filepath)
             
             # Add your transcription code here

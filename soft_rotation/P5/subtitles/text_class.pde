@@ -30,18 +30,22 @@ void showSubtitle() {
 
   //text(showQuestion, 0, 50, width, 50);
 
-  int margin = 200;
+  int margin = 500;
   textAlign(CENTER, TOP);
-  textSize(25);
+  textSize(30);
+  textLeading(27);
 
-  answer.show(margin/2, 55, width-margin, answerHeight);
+
+  answer.show(margin/2, height-270, width-margin, answerHeight);
 
   //question.show(margin/2, 100, width-margin, 100);
   // print("")
 
   textAlign(CENTER, BOTTOM);
-  textSize(25);
-  question.show(margin/2, 50, width-margin, questionHeight);
+  textSize(30);
+  textLeading(27);
+
+  question.show(margin/2, 55, width-margin, questionHeight);
 
   //textSize(30);
   //text(showAnswer, 0, height - 300, width, 200);

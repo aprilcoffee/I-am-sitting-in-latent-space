@@ -1,3 +1,7 @@
+import codeanticode.syphon.*;
+
+PGraphics canvas;
+SyphonServer server;
 
 ArrayList hearts;
 PImage heart_img;
@@ -8,7 +12,8 @@ float questionHeight;
 
 
 void setup() {
-  size(1080, 720, P3D);
+  //size(1080, 720, P3D);
+  fullScreen(P3D,1);
   osc_setup();
 
   noStroke();
@@ -26,10 +31,11 @@ void setup() {
 
   answerHeight = height;
   questionHeight = height-75;
+  server = new SyphonServer(this, "Processing Syphon");
 }
 void draw() {
   background(0);
-  image(bg, 0, 0, width, height);
+  //image(bg, 0, 0, width, height);
   showSubtitle();
 
   for (int s=0; s<hearts.size(); s++) {
@@ -41,9 +47,28 @@ void draw() {
       hearts.remove(s);
     }
   }
+  server.sendScreen();
 
-
+  //testingText();
   //saveFrame("frames/#####.png");
+}
+void testingText() {
+
+
+  int margin = 400;
+  textAlign(CENTER, TOP);
+  textSize(30);
+  textLeading(30);
+  text("testing a sentence to show up in the line\n a really really long one i dont joejqwoejwqpjeopqwjepoqwjepoqwjopeq", margin/2, height-250, width-margin, answerHeight);
+
+  //question.show(margin/2, 100, width-margin, 100);
+  // print("")
+
+  textAlign(CENTER, BOTTOM);
+  textSize(30);
+  textLeading(30);
+
+  text("testing a sentence to show up in the line dqwjdiqwjdioqwjdoqjwdoiqjwoidwjiodqwjidjqwoid", margin/2, 55, width-margin, questionHeight);
 }
 class heart {
   PVector pos;
@@ -62,7 +87,7 @@ class heart {
     vel.add(acc);
   }
   void show() {
-    float size = map(life,255,0,10,40);
-    image(heart_img, pos.x, pos.y, size,size);
+    float size = map(life, 255, 0, 10, 40);
+    image(heart_img, pos.x, pos.y, size, size);
   }
 }
