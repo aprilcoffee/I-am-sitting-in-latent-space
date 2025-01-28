@@ -10,6 +10,20 @@ Make sure you have the following dependencies installed. You can install them us
 pip install -r requirements.txt
 ```
 
+## Configuration Files for GPT Key
+
+To use the GPT-3.5-turbo model, you need to configure your API key. This key is required to authenticate your requests to the OpenAI API. Follow the steps below to set up your configuration file:
+
+1. **Create a Configuration File**: Create a file named `config.py` in the root directory of the project.
+
+2. **Add Your API Key**: Add your OpenAI API key to the `config.json` file in the following format:
+    ```python
+    openai_api_key = <your openai api key>
+    ```
+
+Make sure to keep your `config.py` file secure and do not share it publicly. It contains sensitive information that should be protected.
+
+
 ## OSC and Ports
 
 This project uses Open Sound Control (OSC) to communicate between different components. Below are the details of the OSC messages and the ports used:
