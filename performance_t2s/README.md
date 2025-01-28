@@ -23,6 +23,30 @@ To use the GPT-3.5-turbo model, you need to configure your API key. This key is 
 
 Make sure to keep your `config.py` file secure and do not share it publicly. It contains sensitive information that should be protected.
 
+## How to Run the Code
+
+1. **Configure API Key**: Create a `config.py` file in the root directory and add your OpenAI API key as described in the "Configuration Files for GPT Key" section.
+
+2. **Run the Main Script**: Execute the main script to start the OSC server and begin the text-to-speech performance:
+    ```bash
+    python main.py --ip <your_ip_address> --port <your_port_number>
+    ```
+
+    Replace `<your_ip_address>` with the IP address you want the OSC server to listen on (default is `127.0.0.1`). Replace `<your_port_number>` with the port number you want the OSC server to listen on (default is `5005`).
+
+3. **Start and Stop Conversation**: Use the following OSC messages to control the conversation:
+    - `/start_conversation`: Start the conversation loop.
+    - `/stop_conversation`: Stop the conversation loop.
+
+    You can send these messages using an OSC client or any other method that supports sending OSC messages.
+
+4. **Recording Audio**: To start and stop audio recording, use the following OSC messages:
+    - `/start_recording`: Start recording audio.
+    - `/stop_recording`: Stop recording audio.
+
+    The recorded audio will be processed and used for generating text responses.
+
+
 
 ## OSC and Ports
 
